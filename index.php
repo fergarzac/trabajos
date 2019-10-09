@@ -1,9 +1,14 @@
 <?php
 require 'funciones/head.php';
-require 'funciones/header.php';
 ?>
-<h1>Hello, world</h1>
-
+<div class="container">
+    <div class="row">
+        <div class="buscador">
+            <label for="basic-url">Buscar empleo</label>
+            <input type="text" placeholder="Bucar empleo" class="form-control" />
+        </div>
+    </div>
+<div>
 <?php
 require 'funciones/footer.php';
 ?>
