@@ -13,14 +13,22 @@ require 'funciones/head.php';
             <input type="text" class="input-buscar" placeholder="Buscar Trabajo" />
             <div class="btn-buscar">Buscar</div>
             <div class="row" style="margin-top: 10px">
-                <div class="col-6">
-                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#iniciar">
-                    Iniciar Sesion
-                </button>
-                </div>
-                <div class="col-6" style="text-align: right;">
-                    <a href="#">Registrar</a>
-                </div>
+                <?php
+                if(!isset($_SESSION['idusuario'])){
+                    echo '<div class="col-6"><button type="button" class="btn btn-link" data-toggle="modal" data-target="#iniciar">
+                            Iniciar Sesion
+                        </button>
+                        </div>
+                        <div class="col-6" style="text-align: right;">
+                            <a href="#">Registrar</a>
+                        </div>';
+                }else {
+                    echo '<div class="col-12" style="text-align: center;">
+                            <a href="dashboard.php">Ir al dashboard</a>
+                        </div>';
+                }
+
+                ?>
             </div>
         </div>
         <?php
@@ -43,8 +51,8 @@ require 'funciones/head.php';
                 <div class="modal-body">
                 <form action="login.php" method="POST">
                     <div class="form-group">
-                        <label for="usuario">Usuario</label>
-                        <input type="text" class="form-control" name="usuario" id="usuario" aria-describedby="emailHelp" placeholder="Ingresa tu usuario">
+                        <label for="usuario">Email</label>
+                        <input type="email" class="form-control" name="usuario" id="usuario" aria-describedby="emailHelp" placeholder="Ingresa tu Email">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
