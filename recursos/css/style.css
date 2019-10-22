@@ -32,7 +32,8 @@ h1 {
     transform:translate(-50%, -50%);
     z-index: 1;
     background: rgba(255, 255, 255, 0.7);
-    padding: 20px
+    padding: 20px;
+    text-align: center
 }
 .input-buscar {
     width: 100%;
