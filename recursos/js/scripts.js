@@ -1,9 +1,17 @@
+
 function seleccion(tipo) {
     var input_tipo = document.getElementById('tipo');
     input_tipo.value = tipo;
     $('#registrar').modal('hide');
     $('#registrarse').modal('show');
 }
+
+function openModal(id, validate = null) {
+    if(validate == null || validate == 1) {
+        $('#'+id).modal('show');
+    }
+}
+
 
 function validation() {
     var pass = document.getElementById('password_registrar');
@@ -26,6 +34,29 @@ function validation() {
     return false;
 }
 
+function ValidarEmpleo(){
+    var puesto = document.getElementById('puesto');
+    var descripcion = document.getElementById('descripcion');
+    var sueldo = document.getElementById('sueldo');
+
+    if(puesto.value.length > 0 && descripcion.value.length > 0 && sueldo.value.length > 0) return true;
+
+    return false;
+}
+
 function emailIsValid (email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   }
+
+function ValidarDatos(){
+    var rfc = document.getElementById('rfc');
+    var pais = document.getElementById('pais');
+    var ciudad = document.getElementById('ciudad');
+    var estado = document.getElementById('estado');
+    var descripcion = document.getElementById('descripcion');
+    var sitio_web = document.getElementById('sitio_web');
+    var direccion = document.getElementById('direccion');
+    if(rfc.value.length > 0 && pais.value.length > 0 && ciudad.value.length > 0 && estado.value.length > 0 && descripcion.value.length > 0 && sitio_web.value.length > 0 && direccion.value.length > 0) return true;
+
+    return false;
+}

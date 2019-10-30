@@ -19,6 +19,7 @@ if($con !== null) {
         $_SESSION['idusuario'] = $res['idusuarios'];
         $_SESSION['nombre'] = $res['nombre'];
         $_SESSION['tipo'] = $res['tipo'];
+        $_SESSION['validado'] = $res['validado'];
         unset($_SESSION['error']);
         header('location:dashboard.php');
     }else{
