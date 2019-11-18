@@ -10,8 +10,11 @@ require 'funciones/head.php';
     <div class="row">
         <div class="buscador">
             <center><h1>Hay 100 trabajos disponibles.</h1></center>
-            <input type="text" class="input-buscar" placeholder="Buscar Trabajo" />
-            <div class="btn-buscar">Buscar</div>
+            <form action="dashboard.php" method="GET">
+                <input type="text" class="input-buscar" name="buscar" placeholder="Buscar Trabajo" />
+                <input type="submit" class="btn-buscar mt" value="Buscar">
+            </form>
+
             <div class="row" style="margin-top: 10px">
                 <?php
                 if(!isset($_SESSION['idusuario'])){

@@ -2,18 +2,7 @@
 $title = 'Inicio';
 require 'funciones/head.php';
 require 'funciones/header.php';
-if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
-    $h1 = 'Mis empleos';
-    $empleos = empleosByEmpresa($_SESSION['idusuario']);
-} else if(isset($_GET['buscar']) && !empty($_GET['buscar'])) {
-    $h1 = 'Busquedas de ' . $_GET['buscar'];
-    $empleos = empleosByBusqueda($_GET['buscar']);
-}else {
-    $h1 = 'Todos los empleos';
-    $empleos = todosLosEmpleos();
-}
-
-
+$empresas = getEmpresas();
 ?>
     <div class="container-fluid">
         <?php if (isset($modales)) echo $modales; ?>
@@ -31,12 +20,12 @@ if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
             }
             ?>
             <div class="col-md-8">
-                <h1> <?php echo $h1; ?> </h1>
+                <h1> Empresas </h1>
                 <div class="col-md-12">
                     <div class="row"
                     <div class="buscador">
                         <div class="col-md-8">
-                            <input type="text" class="input-buscar" placeholder="Buscar Trabajo"/>
+                            <input type="text" class="input-buscar" placeholder="Buscar Empresa"/>
                         </div>
                         <div class="col-md-4">
                             <div class="btn-buscar">Buscar</div>
@@ -45,19 +34,19 @@ if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
                 </div>
                 <div class="col-md-12 mt">
                     <?php
-                    for ($i = 0; $i < sizeof($empleos); $i++) {
+                    for ($i = 0; $i < sizeof($empresas); $i++) {
                         echo '<div class="card">
                                  <div class="card-header">
-                                    <span class="txt-15 bold">' . $empleos[$i]['titulo'] . '</span>
+                                    <span class="txt-15 bold">' . $empresas[$i]['nombre'] . '</span>
                                  </div>
                                   <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-8">
-                                            <span class="txt-8">' . $empleos[$i]['descripcion'] . '</span><br>
-                                            <span class="txt-8">$ ' . $empleos[$i]['sueldo'] . '</span>
+                                            <span class="txt-8">' . $empresas[$i]['estado'] . '</span><br>
+                                            <span class="txt-8">' . $empresas[$i]['sitio_web'] . '</span>
                                         </div>
                                         <div class="col-md-4">
-                                            <a href="empleo.php?id=' . $empleos[$i]['idempleos'] . '"  class="btn btn-primary col-md-12">Ver</a>
+                                            <a href="perfil.php?id=' . $empresas[$i]['idempresa'] . '"  class="btn btn-primary col-md-12">Ver</a>
                                         </div>
                                     </div>
                                   </div>
@@ -74,7 +63,7 @@ if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
             } else {
                 echo ' <div style="margin-top: 50px"></div><h3>Postulaciones</h3>';
                 foreach ($mis_postulaciones as $e) {
-                    echo '<div class="card" style="margin: 10px" >
+                    echo '<div class="card" style="margin: 10px">
                             <div class="card-body">
                                 '.$e['titulo'].'
                             </div>

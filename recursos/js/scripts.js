@@ -60,3 +60,11 @@ function ValidarDatos(){
 
     return false;
 }
+
+function ValidarDatosUsuario(){
+    var nombre = document.getElementById('nombre');
+    var telefono = document.getElementById('telefono');
+    if(nombre.value.length > 0 && telefono.value.length > 0 ) return true;
+
+    return false;
+}
