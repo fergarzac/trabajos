@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `empleos` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `empleos`;
 -- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
 --
 -- Host: localhost    Database: empleos
@@ -31,10 +29,11 @@ CREATE TABLE `empleos` (
   `sueldo` varchar(45) CHARACTER SET latin1 NOT NULL,
   `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `editado_el` timestamp NULL DEFAULT NULL,
+  `estado` tinyint(4) NOT NULL DEFAULT '1',
   `idempresa` int(11) NOT NULL,
   PRIMARY KEY (`idempleos`),
   KEY `empresa_idx` (`idempresa`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,18 +45,41 @@ DROP TABLE IF EXISTS `info_empresa`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `info_empresa` (
   `idempresa` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(45) NOT NULL,
   `rfc` varchar(45) NOT NULL,
-  `pais` varchar(45) NOT NULL,
+  `numero_sat` varchar(45) NOT NULL,
   `estado` varchar(45) NOT NULL,
   `ciudad` varchar(45) NOT NULL,
   `direccion` varchar(45) NOT NULL,
   `tipo_empresa` varchar(45) NOT NULL,
-  `descripcion` varchar(45) NOT NULL,
+  `introduccion` varchar(45) NOT NULL,
   `sitio_web` varchar(45) NOT NULL,
-  `logo` varchar(45) DEFAULT NULL,
+  `nombre_contacto` varchar(45) NOT NULL,
+  `telefono_contacto` varchar(45) NOT NULL,
   PRIMARY KEY (`idempresa`),
   CONSTRAINT `empresa` FOREIGN KEY (`idempresa`) REFERENCES `usuarios` (`idusuarios`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `info_usuario`
+--
+
+DROP TABLE IF EXISTS `info_usuario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `info_usuario` (
+  `idusuario` int(11) NOT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `telefono` varchar(10) NOT NULL,
+  `fecha_nacimiento` date NOT NULL,
+  `edad` int(11) NOT NULL,
+  `carrera` enum('Administracion','Gestion Empresarial','Industrias Alimentarias','Gastronomia','Electromecanica','Industrial','Sistemas','Arquitectura') NOT NULL,
+  `ingles` enum('Basico','Intermedio','Avanzado') NOT NULL,
+  `disponibilidad_viajar` tinyint(4) NOT NULL,
+  `curriculum` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idusuario`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +95,7 @@ CREATE TABLE `postulaciones` (
   `idempleo` int(11) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idpostulaciones`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,14 +107,13 @@ DROP TABLE IF EXISTS `usuarios`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuarios` (
   `idusuarios` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(45) NOT NULL,
   `usuario` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
   `tipo` tinytext NOT NULL,
   `validado` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idusuarios`),
   UNIQUE KEY `usuario_UNIQUE` (`usuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -104,4 +125,4 @@ CREATE TABLE `usuarios` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-29 22:17:42
+-- Dump completed on 2019-11-28 20:15:24
