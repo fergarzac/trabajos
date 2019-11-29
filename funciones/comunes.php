@@ -24,7 +24,7 @@ function clearData($data){
 function todosLosEmpleos() {
     $con = getConnection();
     if($con !== null) {
-        $sql = "SELECT * FROM empleos";
+        $sql = "SELECT * FROM empleos ORDER BY creado_el DESC";
         $result = $con->query($sql);
         if($result && $result->num_rows>0){
             return $result->fetch_all(MYSQLI_ASSOC);
@@ -38,7 +38,7 @@ function empleosByEmpresa($id = 0) {
     $con = getConnection();
     $id = intval($id);
     if($con !== null && $id > 0) {
-        $sql = "SELECT * FROM empleos where idempresa = '$id'";
+        $sql = "SELECT * FROM empleos where idempresa = '$id' ORDER BY creado_el DESC";
         $result = $con->query($sql);
         if($result && $result->num_rows>0){
             return $result->fetch_all(MYSQLI_ASSOC);
@@ -91,9 +91,9 @@ function getMisPostulaciones($id = 0) {
     $con = getConnection();
     $id = intval($id);
     if($con !== null && $id > 0) {
-        $sql = "SELECT * FROM empleos left join postulaciones 
-                on postulaciones.idempleo = empleos.idempleos 
-                where postulaciones.idusuario = '$id'";
+        $sql = "SELECT * FROM postulaciones left join empleos 
+                on empleos.idempleos = postulaciones.idempleo
+                where postulaciones.idusuario = '$id' ORDER BY fecha DESC";
         $result = $con->query($sql);
         if($result && $result->num_rows>0){
             return $result->fetch_all(MYSQLI_ASSOC);
@@ -120,12 +120,82 @@ function getEmpresas() {
 function empleosByBusqueda($busqueda = '') {
     $con = getConnection();
     if($con !== null) {
-        $sql = "SELECT * FROM empleos WHERE titulo LIKE \"%".$busqueda."%\" OR descripcion LIKE \"%".$busqueda."%\"";
+        $sql = "SELECT * FROM empleos WHERE titulo LIKE \"%".$busqueda."%\" OR descripcion LIKE \"%".$busqueda."%\" ORDER BY creado_el DESC";
         $result = $con->query($sql);
         if($result && $result->num_rows>0){
             return $result->fetch_all(MYSQLI_ASSOC);
         }
         return [];
+    }
+    return false;
+}
+
+function empleosPaginados($data = [], $pagina = 1, $itemsPorPagina = 10) {
+    if(empty($data)) return ['paginas' => 0, 'empleos' => []];
+
+    $totalPaginas = ceil(sizeof($data) / $itemsPorPagina);
+
+    $start = $totalPaginas <= $pagina ? $start = ($totalPaginas - 1) * $itemsPorPagina : ($pagina - 1) * $itemsPorPagina;
+    $fin = $start + $itemsPorPagina;
+    $empleos = array_slice($data, $start, $fin);
+    return ['paginas' => $totalPaginas, 'empleos' => $empleos];
+}
+function empresasById($id) {
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT * FROM info_empresa
+			LEFT JOIN usuarios ON usuarios.idusuarios = info_empresa.idempresa
+			where info_empresa.idempresa = '$id' ";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC)[0];
+        }
+        return [];
+    }
+    return false;
+}
+function empresasByBusqueda($busqueda = '') {
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT * FROM info_empresa
+			LEFT JOIN usuarios ON usuarios.idusuarios = info_empresa.idempresa
+			where info_empresa.nombre LIKE \"%".$busqueda."%\" OR info_empresa.pais = '$busqueda' OR info_empresa.estado = '$busqueda' ";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+        return [];
+    }
+    return false;
+}
+
+function getUserInfo($id = '') {
+    if($id == '') return [];
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT * FROM info_usuario
+			LEFT JOIN usuarios ON usuarios.idusuarios = info_usuario.idusuario
+			where info_usuario.idusuario = '$id'";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC)[0];
+        }
+        return [];
+    }
+    return [];
+}
+
+
+function isUserValidated($id = ''){
+    if($id == '') return false;
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT * FROM usuarios where validado = 1 AND idusuarios = '$id'";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return true;
+        }
+        return false;
     }
     return false;
 }

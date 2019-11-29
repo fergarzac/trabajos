@@ -3,7 +3,7 @@ $script = explode('/', $_SERVER['SCRIPT_FILENAME']);
 $actual = end($script);
 $label = '<span class="sr-only">(current)</span>';
 $perfil = isset($_SESSION['idusuario']) ? '<li class="nav-item">
-<a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Perfil</a>
+<a class="nav-link" href="perfil.php" tabindex="-1" aria-disabled="true">Perfil</a>
 </li>' : '';
 $salir = isset($_SESSION['idusuario']) ? '<a class="btn btn-sm btn-outline-secondary" href="salir.php">Salir</a>' :
  '<button class="btn btn-sm btn-outline-secondary" type="button" data-toggle="modal" data-target="#iniciar">Entrar</button>

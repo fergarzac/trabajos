@@ -11,7 +11,7 @@ require 'funciones/head.php';
         <div class="buscador">
             <center><h1>Hay 100 trabajos disponibles.</h1></center>
             <form action="dashboard.php" method="GET">
-                <input type="text" class="input-buscar" name="buscar" placeholder="Buscar Trabajo" />
+                <input type="text" class="input-buscar" name="buscar" placeholder="Buscar Trabajo" autocomplete="off"/>
                 <input type="submit" class="btn-buscar mt" value="Buscar">
             </form>
 
@@ -58,11 +58,11 @@ require 'funciones/head.php';
                 <form action="login.php" method="POST">
                     <div class="form-group">
                         <label for="usuario">Email</label>
-                        <input type="email" class="form-control" name="usuario" id="usuario" aria-describedby="emailHelp" placeholder="Ingresa tu Email">
+                        <input autocomplete="off" type="email" class="form-control" name="usuario" id="usuario" aria-describedby="emailHelp" placeholder="Ingresa tu Email">
                     </div>
                     <div class="form-group">
                         <label for="password">Contraseña</label>
-                        <input type="password" class="form-control" name="password" id="password_login" placeholder="Ingresa tu Contraseña">
+                        <input autocomplete="off" type="password" class="form-control" name="password" id="password_login" placeholder="Ingresa tu Contraseña">
                     </div>
             
                 </div>
@@ -111,19 +111,19 @@ require 'funciones/head.php';
                 <form action="register.php" method="POST" onsubmit="return validation()">
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" class="form-control" name="nombre" id="nombre" aria-describedby="emailHelp" placeholder="Ingresa nombre completo o nombre de la empresa">
+                        <input autocomplete="off" type="text" class="form-control" name="nombre" id="nombre" aria-describedby="emailHelp" placeholder="Ingresa nombre completo o nombre de la empresa">
                     </div>
                     <div class="form-group">
                         <label for="usuario">Email</label>
-                        <input type="email" class="form-control" name="usuario_registrar" id="usuario_registrar" aria-describedby="emailHelp" placeholder="Ingresa tu usuario">
+                        <input autocomplete="off" type="email" class="form-control" name="usuario_registrar" id="usuario_registrar" aria-describedby="emailHelp" placeholder="Ingresa tu usuario">
                     </div>
                     <div class="form-group">
                         <label for="password">Contraseña</label>
-                        <input type="password" class="form-control" name="password_registrar" id="password_registrar" placeholder="Ingresa tu Contraseña">
+                        <input autocomplete="off" type="password" class="form-control" name="password_registrar" id="password_registrar" placeholder="Ingresa tu Contraseña">
                     </div>
                     <div class="form-group">
                         <label for="password">Confirma contraseña</label>
-                        <input type="password" class="form-control" name="password_confim" id="password_confim" placeholder="Ingresa de nuevo tu Contraseña">
+                        <input autocomplete="off" type="password" class="form-control" name="password_confim" id="password_confim" placeholder="Ingresa de nuevo tu Contraseña">
                     </div>
                     <input type="hidden" class="form-control" name="tipo" id="tipo">
                 </div>

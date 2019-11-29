@@ -30,21 +30,14 @@ if($con !== null) {
     $disponibilidad = $_POST['disponibilidad'] == "on" ? true : false;
     $curriculum = "";
     $idusuario = $_SESSION['idusuario'];
-    $sql = "INSERT INTO info_usuario(idusuario, nombre, telefono, fecha_nacimiento, edad, carrera, ingles, disponibilidad_viajar, curriculum) 
-            VALUES ('$idusuario', '$nombre', '$telefono', '$fecha_nacimiento', '$edad', '$carrera', '$ingles', '$disponibilidad', '$curriculum')";
+    $sql = "UPDATE info_usuario SET nombre = '$nombre', telefono = '$telefono', fecha_nacimiento = '$fecha_nacimiento', edad = '$edad', 
+            carrera = '$carrera', ingles = '$ingles', disponibilidad_viajar = '$disponibilidad', curriculum = '$curriculum' 
+            WHERE idusuario = '$idusuario'";
 
     $result = $con->query($sql);
     if($result) {
-        $sql2 = "UPDATE usuarios SET validado = 1 WHERE idusuarios = '$idusuario'";
-        $result2 = $con->query($sql2);
-        if($result2) {
-            unset($_SESSION['error']);
-            $_SESSION['validado'] = 1;
-            header('location:dashboard.php');
-        }else{
-            $_SESSION['error'] = 'Pendiente de validacion.';
-            header('location:index.php');
-        }
+        $_SESSION['notificacion'] = "Usuario modificado correctamente";
+        header('location:dashboard.php');
     }else{
         unset($_SESSION['error']);
         header('location:dashboard.php');

@@ -5,7 +5,7 @@ require 'funciones\comunes.php';
 if(!isset($_SESSION['idusuario']) && !isset($_SESSION['tipo']) && $_SESSION['tipo'] !== '1'){
     header('location:index.php');
 }
-$array = ['rfc', 'pais', 'estado', 'ciudad', 'direccion', 'tipo_empresa', 'descripcion', 'sitio_web'];
+$array = ['rfc', 'nombre', 'sat', 'estado', 'ciudad', 'direccion', 'tipo_empresa', 'descripcion', 'sitio_web', 'nombre_contacto', 'telefono_contacto'];
 if(!validarArray($_POST, $array)){
     header('location:index.php');
 }
@@ -16,15 +16,19 @@ if($con !== null) {
     //Limpiar los datos que sean string
     $data = clearData($_POST);
     $rfc = $_POST['rfc'];
-    $pais = $_POST['pais'];
-    $estado = $_POST['$estado'];
+    $nombre = $_POST['nombre'];
+    $numero_sat = $_POST['sat'];
+    $estado = $_POST['estado'];
     $ciudad = $_POST['ciudad'];
     $direccion = $_POST['direccion'];
     $tipo_empresa = $_POST['tipo_empresa'];
     $descripcion = $_POST['descripcion'];
     $sitio_web = $_POST['sitio_web'];
+    $nombre_contacto = $_POST['nombre_contacto'];
+    $telefono_contacto = $_POST['$telefono_contacto'];
     $idempresa = $_SESSION['idusuario'];
-    $sql = "INSERT INTO info_empresa(idempresa, rfc, pais, estado, ciudad, direccion, tipo_empresa, descripcion, sitio_web) VALUES ('$idempresa', '$rfc', '$pais', '$estado', '$ciudad', '$direccion', '$tipo_empresa', '$descripcion', '$sitio_web')";
+    $sql = "INSERT INTO info_empresa(idempresa, nombre, rfc, numero_sat, estado, ciudad, direccion, tipo_empresa, introduccion, sitio_web, nombre_contacto, telefono_contacto) VALUES 
+            ('$idempresa', '$nombre', '$rfc', '$numero_sat', '$estado', '$ciudad', '$direccion', '$tipo_empresa', '$descripcion', '$sitio_web', '$nombre_contacto', '$telefono_contacto')";
     $result = $con->query($sql);
     if($result) {
         $sql2 = "UPDATE usuarios SET validado = 1 WHERE idusuarios = '$idempresa'";

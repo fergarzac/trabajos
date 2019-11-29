@@ -2,17 +2,14 @@
 $title = 'Inicio';
 require 'funciones/head.php';
 require 'funciones/header.php';
-if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
-    $h1 = 'Mis empleos';
-    $empleos = empleosByEmpresa($_SESSION['idusuario']);
-} else if(isset($_GET['buscar']) && !empty($_GET['buscar'])) {
-    $h1 = 'Busquedas de ' . $_GET['buscar'];
-    $empleos = empleosByBusqueda($_GET['buscar']);
-}else {
-    $h1 = 'Todos los empleos';
-    $empleos = todosLosEmpleos();
-
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    header('location:dashboard.php');
 }
+
+$empleos = empleosByEmpresa($_GET['id']);
+$datosEmpresa = empresasById($_GET['id']);
+
+$h1 = "Empleos de la empresa " . $datosEmpresa['nombre'];
 $pagina = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
 $paginacion = empleosPaginados($empleos, $pagina);
 $nextPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['page']) < $paginacion['paginas'] ? intval($_GET['page']) + 1 : 2;

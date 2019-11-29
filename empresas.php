@@ -2,9 +2,21 @@
 $title = 'Inicio';
 require 'funciones/head.php';
 require 'funciones/header.php';
-$empresas = getEmpresas();
+
+
+if(isset($_GET['buscar']) && !empty($_GET['buscar'])) {
+    $h1 = 'Busquedas de ' . $_GET['buscar'];
+    $empresas = empresasByBusqueda($_GET['buscar']);
+}else {
+    $h1 = 'Todos los empleos';
+    $empresas = getEmpresas();
+}
+$pagina = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
+$paginacion = empleosPaginados($empresas, $pagina);
+$nextPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['page']) < $paginacion['paginas'] ? intval($_GET['page']) + 1 : 2;
+$previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['page']) > 1 ? intval($_GET['page']) - 1 : 1;
 ?>
-    <div class="container-fluid">
+    <div class="container">
         <?php if (isset($modales)) echo $modales; ?>
         <div class="row">
             <?php
@@ -19,43 +31,59 @@ $empresas = getEmpresas();
                                 </div></div>';
             }
             ?>
-            <div class="col-md-8">
+            <div class="col-md-8" style="background: #f8f9fa;margin: 10px">
                 <h1> Empresas </h1>
                 <div class="col-md-12">
+                    <form action="empresas.php" method="GET">
                     <div class="row"
                     <div class="buscador">
                         <div class="col-md-8">
-                            <input type="text" class="input-buscar" placeholder="Buscar Empresa"/>
+                            <input type="text" name="buscar" class="input-buscar" placeholder="Buscar Empresa" autocomplete="off"/>
                         </div>
                         <div class="col-md-4">
-                            <div class="btn-buscar">Buscar</div>
+                            <input type="submit" class="btn-buscar" value="Buscar">
                         </div>
                     </div>
+                    </form>
                 </div>
                 <div class="col-md-12 mt">
                     <?php
-                    for ($i = 0; $i < sizeof($empresas); $i++) {
-                        echo '<div class="card">
-                                 <div class="card-header">
-                                    <span class="txt-15 bold">' . $empresas[$i]['nombre'] . '</span>
-                                 </div>
+                    foreach ($paginacion['empleos'] as $key => $data) {
+                        echo '<div class="card" style="margin: 5px">
                                   <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-8">
-                                            <span class="txt-8">' . $empresas[$i]['estado'] . '</span><br>
-                                            <span class="txt-8">' . $empresas[$i]['sitio_web'] . '</span>
+                                        <div class="col-md-10">
+                                            <span class="txt-15 bold">' . $data['nombre'] . '</span><br>
+                                            <span class="txt-8">' . $data['estado'] . '</span><br>
+                                            <span class="txt-8">' . $data['sitio_web'] . '</span>
                                         </div>
-                                        <div class="col-md-4">
-                                            <a href="perfil.php?id=' . $empresas[$i]['idempresa'] . '"  class="btn btn-primary col-md-12">Ver</a>
+                                        <div class="col-md-2">
+                                            <a href="empleos.php?id=' . $data['idempresa'] . '" style="float: right">
+                                                <i class="fas fa-chevron-circle-right" style="font-size: 30pt"></i>
+                                            </a>
                                         </div>
                                     </div>
                                   </div>
                                 </div>';
                     }
                     ?>
+                    <div class="mt">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item"><a class="page-link" href="<?php echo 'dashboard.php?page='.$previusPage ?>">Anterior</a></li>
+                                <?php
+                                for ($i = 1; $i <= $paginacion['paginas']; $i++) {
+                                    echo  '<li class="page-item"><a class="page-link" href="dashboard.php?page='.$i.'">'.$i.'</a></li>';
+
+                                }
+                                ?>
+                                <li class="page-item"><a class="page-link" href="<?php echo 'dashboard.php?page='.$nextPage ?>">Siguiente</a></li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
-        <div class="col-md-3">
+        <div class="col-md-3" style="background: #f8f9fa;margin: 10px">
             <?php
             if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
                 $enabled = isset($_SESSION['validado']) && $_SESSION['validado'] == 0 ? 'data-toggle="tooltip" data-placement="top" title="Necesitas validar tu cuenta"' : '';
@@ -63,9 +91,18 @@ $empresas = getEmpresas();
             } else {
                 echo ' <div style="margin-top: 50px"></div><h3>Postulaciones</h3>';
                 foreach ($mis_postulaciones as $e) {
-                    echo '<div class="card" style="margin: 10px">
+                    echo '<div class="card" style="margin: 10px" >
                             <div class="card-body">
-                                '.$e['titulo'].'
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        '.$e['titulo'].'
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a href="empleo.php?id=' . $e['idempleo'] . '"  style="float: right">
+                                            <i class="fas fa-chevron-circle-right" style="font-size: 20pt"></i>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>';
                 }

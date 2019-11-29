@@ -6,6 +6,8 @@ if(!isset($_POST['nombre']) && !isset($_POST['usuario_registrar']) && !isset($_P
     header('location:index.php');
 }
 
+
+
 //Establecer conexion
 $con = getConnection();
 if($con !== null) {
@@ -15,19 +17,25 @@ if($con !== null) {
     $usuario = $data['usuario_registrar'];
     $pass = $data['password_registrar'];
     $tipo = $data['tipo'];
-    $sql = "INSERT INTO usuarios(nombre, usuario, password, tipo) VALUES ('$nombre', '$usuario','$pass', '$tipo')";
-    $result = $con->query($sql);
-    if($result) {
-        $sql2 = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
-        $result2 = $con->query($sql2);
-        $res = $result2->fetch_assoc();
-        $_SESSION['idusuario'] = $res['idusuarios'];
-        $_SESSION['nombre'] = $res['nombre'];
-        $_SESSION['tipo'] = $res['tipo'];
-        unset($_SESSION['error']);
-        header('location:dashboard.php');
+
+    //verifica si en caso de ser un alumno el que se quiere registrar, debe ser con un correo del instituto
+    if($tipo == "1" || preg_match("/^[a-zA-Z0-9]+@itscc.edu.mx/", $usuario)){
+        $sql = "INSERT INTO usuarios(usuario, password, tipo) VALUES ('$usuario','$pass', '$tipo')";
+        $result = $con->query($sql);
+        if($result) {
+            $sql2 = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
+            $result2 = $con->query($sql2);
+            $res = $result2->fetch_assoc();
+            $_SESSION['idusuario'] = $res['idusuarios'];
+            $_SESSION['tipo'] = $res['tipo'];
+            unset($_SESSION['error']);
+            header('location:dashboard.php');
+        }else{
+            $_SESSION['error'] = 'No se pudo crear el usuario';
+            header('location:index.php');
+        }
     }else{
-        $_SESSION['error'] = 'No se pudo crear el usuario';
+        $_SESSION['error'] = 'Tu correo debe ser institucional.';
         header('location:index.php');
     }
 }else{

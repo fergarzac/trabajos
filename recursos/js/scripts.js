@@ -50,13 +50,17 @@ function emailIsValid (email) {
 
 function ValidarDatos(){
     var rfc = document.getElementById('rfc');
-    var pais = document.getElementById('pais');
+    var nombre = document.getElementById('nombre');
+    var sat = document.getElementById('sat');
+    var tipo = document.getElementById('tipo_empresa');
     var ciudad = document.getElementById('ciudad');
     var estado = document.getElementById('estado');
     var descripcion = document.getElementById('descripcion');
     var sitio_web = document.getElementById('sitio_web');
     var direccion = document.getElementById('direccion');
-    if(rfc.value.length > 0 && pais.value.length > 0 && ciudad.value.length > 0 && estado.value.length > 0 && descripcion.value.length > 0 && sitio_web.value.length > 0 && direccion.value.length > 0) return true;
+    var nombre_contacto = document.getElementById('nombre_contacto');
+    var telefono_contacto = document.getElementById('telefono_contacto');
+    if(rfc.value.length > 0 && nombre_contacto.value.length > 0 && telefono_contacto.value.length > 0 && sat.value.length > 0 && tipo.value.length > 0 && nombre.value.length > 0 && ciudad.value.length > 0 && estado.value.length > 0 && descripcion.value.length > 0 && sitio_web.value.length > 0 && direccion.value.length > 0) return true;
 
     return false;
 }

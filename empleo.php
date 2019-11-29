@@ -23,10 +23,16 @@ if($data == false || empty($data)) header('location:dashboard.php');
     <div class="row" >
         <div class="col-md-8">
             <h4>Datos del empleo</h4>
+            <p >
+                <span style="font-weight: bold;font-size: 12pt"><?php echo $data['titulo']; ?></span> <span style="font-size: 10pt; color: darkgrey">Publicado: <?php echo date_format(date_create($data['creado_el']),"d/m/Y"); ?></span>
+            </p>
+            <p>
+                <?php echo $data['descripcion']; ?>
+            </p>
             <?php if (!isset($_SESSION['tipo'])): ?>
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="button" data-toggle="modal" data-target="#iniciar" class="btn btn-info">Aplicar</button>
+                        <button type="button" data-toggle="modal" data-target="#iniciar" class="btn btn-info">Postularte</button>
                     </div>
                 </div>
             <?php elseif ($_SESSION['tipo'] == 2): ?>
@@ -34,7 +40,7 @@ if($data == false || empty($data)) header('location:dashboard.php');
                     <div class="col-md-12">
                         <form action="postularse.php" method="POST">
                             <input type="hidden"  name="idempleo" id="idempleo" value="<?php echo $data['idempleos']; ?>">
-                            <button type="submit" class="btn btn-info">Aplicar</button>
+                            <button type="submit" class="btn btn-info">Postularte</button>
                         </form>
                     </div>
                 </div>
