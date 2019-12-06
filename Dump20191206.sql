@@ -25,15 +25,17 @@ DROP TABLE IF EXISTS `empleos`;
 CREATE TABLE `empleos` (
   `idempleos` int(11) NOT NULL AUTO_INCREMENT,
   `titulo` varchar(45) CHARACTER SET latin1 NOT NULL,
-  `descripcion` varchar(45) CHARACTER SET latin1 NOT NULL,
+  `descripcion` text CHARACTER SET latin1 NOT NULL,
   `sueldo` varchar(45) CHARACTER SET latin1 NOT NULL,
+  `categoria` enum('Administracion','Finanzas','Tecnologia','Ventas') DEFAULT NULL,
+  `tipo_contrato` enum('Tiempo completo','Medio tiempo','Indeterminado','Determinado','Temporal','Otro') DEFAULT NULL,
   `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `editado_el` timestamp NULL DEFAULT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT '1',
   `idempresa` int(11) NOT NULL,
   PRIMARY KEY (`idempleos`),
   KEY `empresa_idx` (`idempresa`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -56,9 +58,10 @@ CREATE TABLE `info_empresa` (
   `sitio_web` varchar(45) NOT NULL,
   `nombre_contacto` varchar(45) NOT NULL,
   `telefono_contacto` varchar(45) NOT NULL,
+  `logo` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idempresa`),
   CONSTRAINT `empresa` FOREIGN KEY (`idempresa`) REFERENCES `usuarios` (`idusuarios`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -83,6 +86,25 @@ CREATE TABLE `info_usuario` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `notificaciones`
+--
+
+DROP TABLE IF EXISTS `notificaciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `notificaciones` (
+  `idnotificaciones` int(11) NOT NULL AUTO_INCREMENT,
+  `evento` enum('agrego','modifico','cerro','selecciono','postulo') NOT NULL,
+  `visto_por` json NOT NULL,
+  `para` int(11) DEFAULT NULL,
+  `idusuario` int(11) DEFAULT NULL,
+  `idaux` int(11) DEFAULT NULL,
+  `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idnotificaciones`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `postulaciones`
 --
 
@@ -95,6 +117,23 @@ CREATE TABLE `postulaciones` (
   `idempleo` int(11) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idpostulaciones`)
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `seleccionado`
+--
+
+DROP TABLE IF EXISTS `seleccionado`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `seleccionado` (
+  `idseleccionado` int(11) NOT NULL AUTO_INCREMENT,
+  `idusuario` int(11) NOT NULL,
+  `idempleo` int(11) NOT NULL,
+  `idempresa` int(11) DEFAULT NULL,
+  `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idseleccionado`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -111,9 +150,26 @@ CREATE TABLE `usuarios` (
   `password` varchar(45) NOT NULL,
   `tipo` tinytext NOT NULL,
   `validado` tinyint(4) NOT NULL DEFAULT '0',
+  `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idusuarios`),
   UNIQUE KEY `usuario_UNIQUE` (`usuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `vistas`
+--
+
+DROP TABLE IF EXISTS `vistas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vistas` (
+  `idvistas` int(11) NOT NULL AUTO_INCREMENT,
+  `idusuario` int(11) NOT NULL,
+  `idempleo` int(11) NOT NULL,
+  `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idvistas`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -125,4 +181,4 @@ CREATE TABLE `usuarios` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-28 20:15:24
+-- Dump completed on 2019-12-06  1:49:23

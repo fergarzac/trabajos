@@ -16,15 +16,18 @@ if($con !== null) {
     //Limpiar los datos que sean string
     $data = clearData($_POST);
     $titulo = $_POST['puesto'];
-    $descripcion = $_POST['descripcion'];
+    $descripcion = nl2br($_POST['descripcion']);
     $sueldo = $_POST['sueldo'];
+    $categoria = $_POST['categoria'];
+    $tipo_contrato = $_POST['tipo'];
     $idempresa = $_SESSION['idusuario'];
-    $sql = "INSERT INTO empleos(titulo, descripcion, sueldo, idempresa) VALUES ('$titulo', '$descripcion','$sueldo','$idempresa')";
+    $sql = "INSERT INTO empleos(titulo, descripcion, sueldo, categoria, tipo_contrato, idempresa) VALUES ('$titulo', '$descripcion','$sueldo','$categoria','$tipo_contrato','$idempresa')";
     $result = $con->query($sql);
     if($result) {
+        unset($_SESSION['error']);
         header('location:dashboard.php');
     }else{
         $_SESSION['error'] = 'No se pudo crear el empleo';
-        header('location:index.php');
+        header('location:dashboard.php');
     }
 }

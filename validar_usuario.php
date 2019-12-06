@@ -28,7 +28,9 @@ if($con !== null) {
     $carrera = $_POST['carrera'];
     $ingles = $_POST['ingles'];
     $disponibilidad = $_POST['disponibilidad'] == "on" ? true : false;
-    $curriculum = "";
+
+    $uploadCurriculum = isset($_FILES['curriculum']) ? uploadFile($_FILES['curriculum']) : ['status' => 0];
+    $curriculum = $uploadCurriculum['status'] == 1 ? $uploadCurriculum['dir'] : '';
     $idusuario = $_SESSION['idusuario'];
     $sql = "INSERT INTO info_usuario(idusuario, nombre, telefono, fecha_nacimiento, edad, carrera, ingles, disponibilidad_viajar, curriculum) 
             VALUES ('$idusuario', '$nombre', '$telefono', '$fecha_nacimiento', '$edad', '$carrera', '$ingles', '$disponibilidad', '$curriculum')";

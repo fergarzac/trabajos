@@ -5,13 +5,12 @@ require 'funciones/header.php';
 if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
     $h1 = 'Mis empleos';
     $empleos = empleosByEmpresa($_SESSION['idusuario']);
-} else if(isset($_GET['buscar']) && !empty($_GET['buscar'])) {
+} else if (isBusqueda($_GET)) {
     $h1 = 'Busquedas de ' . $_GET['buscar'];
-    $empleos = empleosByBusqueda($_GET['buscar']);
-}else {
+    $empleos = empleosByBusqueda($_GET);
+} else {
     $h1 = 'Todos los empleos';
     $empleos = todosLosEmpleos();
-
 }
 $pagina = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
 $paginacion = empleosPaginados($empleos, $pagina);
@@ -36,29 +35,111 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
             <div class="col-md-8" style="background: #f8f9fa;margin: 10px">
                 <h1> <?php echo $h1; ?> </h1>
                 <div class="col-md-12">
-                    <form action="dashboard.php" method="GET">
-                    <div class="row"
-                    <div class="buscador">
-                            <div class="col-md-8">
-                                <input type="text" name="buscar" class="input-buscar" placeholder="Buscar Trabajo" autocomplete="off" />
+                    <form action="dashboard.php" method="GET" >
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <div class="row">
+
+                                    <div class="col-md-8">
+                                        <input type="text" name="buscar" class="input-buscar"
+                                               placeholder="Buscar Trabajo" autocomplete="off" value="<?php echo isset($_GET['buscar']) ? $_GET['buscar']  : '' ?>"/>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn-buscar" data-toggle="collapse" data-target=".collapse"
+                                                aria-expanded="false" aria-controls="busquedaAvanzada">Avanzado
+                                        </button>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="submit" class="btn-buscar" value="Buscar">
+                                    </div>
+
                             </div>
-                            <div class="col-md-4">
-                                <input type="submit" class="btn-buscar" value="Buscar">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="collapse" id="busquedaAvanzada">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="formControlRange">Salario minimo</label>
+                                                        <div class="input-group mb-2 mr-sm-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text">$</div>
+                                                            </div>
+                                                            <input type="input" class="form-control" id="salarioMin" name="salarioMin" value="<?php echo isset($_GET['salarioMin']) ? $_GET['salarioMin']  : '' ?>">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="formControlRange">Salario maximo</label>
+                                                        <div class="input-group mb-2 mr-sm-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text">$</div>
+                                                            </div>
+                                                            <input type="input" class="form-control" id="salarioMax" name="salarioMax" value="<?php echo isset($_GET['salarioMax']) ? $_GET['salarioMax']  : '' ?>">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="formControlRange">Categoria</label>
+                                                        <select class="custom-select" name="categoria">
+                                                            <option value="" selected>Seleccionar</option>
+                                                            <option value="1">Administración</option>
+                                                            <option value="2">Finanzas</option>
+                                                            <option value="2">Tecnologia</option>
+                                                            <option value="3">Ventas</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="formControlRange">Tipo de contrato</label>
+                                                        <select class="custom-select" name="tipo">
+                                                            <option value="" selected>Seleccionar</option>
+                                                            <option value="1">Tiempo completo</option>
+                                                            <option value="2">Medio tiempo</option>
+                                                            <option value="3">Indeterminado</option>
+                                                            <option value="4">Determinado</option>
+                                                            <option value="5">Temporal</option>
+                                                            <option value="6">Otro</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
                     </div>
                     </form>
                 </div>
                 <div class="col-md-12 mt">
                     <?php
+                    if(sizeof($empleos) == 0) {
+                        echo '<h3>Sin resultados</h3>';
+                    }
                     foreach ($paginacion['empleos'] as $key => $data) {
                         echo '<div class="card" style="margin: 5px">
                                   <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-10">
                                             <span class="txt-15 bold">' . $data['titulo'] . '</span><br>
-                                            <span class="txt-12">' . $data['descripcion'] . '</span><br>
+                                            <span class="txt-12">' . explode('<',$data['descripcion'])[0] . '</span><br>
                                             <span class="txt-10">$ ' . $data['sueldo'] . '</span><br>
-                                            <span class="txt-8" style="color: darkgrey"> ' . date_format(date_create($data['creado_el']), 'd/m/Y')  . '</span>
+                                            <span class="txt-8" style="color: darkgrey"> ' . date_format(date_create($data['creado_el']), 'd/m/Y') . '</span>
                                         </div>
                                         <div class="col-md-2">
                                             <a href="empleo.php?id=' . $data['idempleos'] . '"  style="float: right">
@@ -73,32 +154,36 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                     <div class="mt">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
-                                <li class="page-item"><a class="page-link" href="<?php echo 'dashboard.php?page='.$previusPage ?>">Anterior</a></li>
+                                <li class="page-item"><a class="page-link"
+                                                         href="<?php echo 'dashboard.php?page=' . $previusPage ?>">Anterior</a>
+                                </li>
                                 <?php
-                                    for ($i = 1; $i <= $paginacion['paginas']; $i++) {
-                                        echo  '<li class="page-item"><a class="page-link" href="dashboard.php?page='.$i.'">'.$i.'</a></li>';
+                                for ($i = 1; $i <= $paginacion['paginas']; $i++) {
+                                    echo '<li class="page-item"><a class="page-link" href="dashboard.php?page=' . $i . '">' . $i . '</a></li>';
 
-                                    }
-                                 ?>
-                                <li class="page-item"><a class="page-link" href="<?php echo 'dashboard.php?page='.$nextPage ?>">Siguiente</a></li>
+                                }
+                                ?>
+                                <li class="page-item"><a class="page-link"
+                                                         href="<?php echo 'dashboard.php?page=' . $nextPage ?>">Siguiente</a>
+                                </li>
                             </ul>
                         </nav>
                     </div>
                 </div>
             </div>
-        <div class="col-md-3" style="background: #f8f9fa;margin: 10px">
-            <?php
-            if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
-                $enabled = isset($_SESSION['validado']) && $_SESSION['validado'] == 0 ? 'data-toggle="tooltip" data-placement="top" title="Necesitas validar tu cuenta"' : '';
-                echo '<button type="button" class="btn btn-primary col-md-12" style="margin-top: 15px" onclick="javascript:openModal(\'agregar_empleo\', ' . $_SESSION['validado'] . ')" ' . $enabled . '>Agregar Empleo</button>';
-            } else {
-                echo ' <div style="margin-top: 50px"></div><h3>Postulaciones</h3>';
-                foreach ($mis_postulaciones as $e) {
-                    echo '<div class="card" style="margin: 10px" >
+            <div class="col-md-3" style="background: #f8f9fa;margin: 10px;padding:15px">
+                <?php
+                if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
+                    $enabled = isset($_SESSION['validado']) && $_SESSION['validado'] != 1 ? 'data-toggle="tooltip" data-placement="top" title="Necesitas validar tu cuenta"' : '';
+                    echo '<button type="button" class="btn btn-primary col-md-12" style="margin-top: 15px" onclick="javascript:openModal(\'agregar_empleo\', ' . $_SESSION['validado'] . ')" ' . $enabled . '>Agregar Empleo</button>';
+                } else {
+                    echo ' <h3>Postulaciones</h3>';
+                    foreach ($mis_postulaciones as $e) {
+                        echo '<div class="card" style="margin: 10px" >
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-10">
-                                        '.$e['titulo'].'
+                                        ' . $e['titulo'] . '
                                     </div>
                                     <div class="col-md-2">
                                         <a href="empleo.php?id=' . $e['idempleo'] . '"  style="float: right">
@@ -108,12 +193,12 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                                 </div>
                             </div>
                         </div>';
+                    }
+                    echo '</div>';
                 }
-                echo '</div>';
-            }
-            ?>
+                ?>
+            </div>
         </div>
-    </div>
     </div>
     <div class="modal fade" id="agregar_empleo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -138,9 +223,37 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                                       rows="10"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="password">Sueldo mensualk</label>
+                            <label for="password">Sueldo mensual</label>
                             <input type="number" class="form-control" name="sueldo" id="sueldo"
                                    placeholder="Ingresa el sueldo mensual">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="formControlRange">Categoria</label>
+                                    <select class="custom-select" name="categoria">
+                                        <option selected>Seleccionar</option>
+                                        <option value="1">Administración</option>
+                                        <option value="2">Finanzas</option>
+                                        <option value="3">Tecnologia</option>
+                                        <option value="4">Ventas</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="formControlRange">Tipo de contrato</label>
+                                    <select class="custom-select" name="tipo">
+                                        <option selected>Seleccionar</option>
+                                        <option value="1">Tiempo completo</option>
+                                        <option value="2">Medio tiempo</option>
+                                        <option value="3">Indeterminado</option>
+                                        <option value="4">Determinado</option>
+                                        <option value="5">Temporal</option>
+                                        <option value="6">Otro</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                 </div>
                 <div class="modal-footer">

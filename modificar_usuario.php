@@ -28,7 +28,8 @@ if($con !== null) {
     $carrera = $_POST['carrera'];
     $ingles = $_POST['ingles'];
     $disponibilidad = $_POST['disponibilidad'] == "on" ? true : false;
-    $curriculum = "";
+    $uploadCurriculum = isset($_FILES['curriculum']) ? uploadFile($_FILES['curriculum']) : ['status' => 0];
+    $curriculum = $uploadCurriculum['status'] == 1 ? $uploadCurriculum['dir'] : '';
     $idusuario = $_SESSION['idusuario'];
     $sql = "UPDATE info_usuario SET nombre = '$nombre', telefono = '$telefono', fecha_nacimiento = '$fecha_nacimiento', edad = '$edad', 
             carrera = '$carrera', ingles = '$ingles', disponibilidad_viajar = '$disponibilidad', curriculum = '$curriculum' 
@@ -37,9 +38,11 @@ if($con !== null) {
     $result = $con->query($sql);
     if($result) {
         $_SESSION['notificacion'] = "Usuario modificado correctamente";
-        header('location:dashboard.php');
-    }else{
         unset($_SESSION['error']);
+        header('location:perfil.php');
+    }else{
+        $_SESSION['error'] = "Ocurrio un error.";
+        unset($_SESSION['notificacion']);
         header('location:dashboard.php');
     }
 }

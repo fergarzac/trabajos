@@ -72,3 +72,32 @@ function ValidarDatosUsuario(){
 
     return false;
 }
+
+function changeImg(){
+    var input = document.getElementById('logo');
+    var url = input.value;
+    var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+    if (input.files && input.files[0]&& (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#imglogo').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+    else{
+        $('#imglogo').attr('src', 'https://via.placeholder.com/150');
+    }
+}
+
+function getTabla(id){
+    var paneles = ['usuarios','empresas','empleos','seleccionados','empresas_pendientes'];
+    hideAll(paneles);
+    document.getElementById(paneles[id]).style.display = "block";
+}
+
+function hideAll(paneles){
+    paneles.forEach(function (e) {
+        document.getElementById(e).style.display = "none";
+    });
+}

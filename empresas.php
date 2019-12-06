@@ -52,15 +52,22 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                         echo '<div class="card" style="margin: 5px">
                                   <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-10">
-                                            <span class="txt-15 bold">' . $data['nombre'] . '</span><br>
-                                            <span class="txt-8">' . $data['estado'] . '</span><br>
-                                            <span class="txt-8">' . $data['sitio_web'] . '</span>
-                                        </div>
                                         <div class="col-md-2">
-                                            <a href="empleos.php?id=' . $data['idempresa'] . '" style="float: right">
-                                                <i class="fas fa-chevron-circle-right" style="font-size: 30pt"></i>
-                                            </a>
+                                            <img src="'. (isset($data['logo']) && !empty($data['logo']) ? $data['logo'] : "https://via.placeholder.com/150")  .'" width="100%">
+                                        </div>
+                                        <div class="col-md-10">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <span class="txt-15 bold">' . $data['nombre'] . '</span><br>
+                                                    <span class="txt-8">' . $data['estado'] . '</span><br>
+                                                    <span class="txt-8">' . $data['sitio_web'] . '</span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <a href="empleos.php?id=' . $data['idempresa'] . '" style="float: right">
+                                                        <i class="fas fa-chevron-circle-right" style="font-size: 30pt"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                   </div>
@@ -86,7 +93,7 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
         <div class="col-md-3" style="background: #f8f9fa;margin: 10px">
             <?php
             if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
-                $enabled = isset($_SESSION['validado']) && $_SESSION['validado'] == 0 ? 'data-toggle="tooltip" data-placement="top" title="Necesitas validar tu cuenta"' : '';
+                $enabled = isset($_SESSION['validado']) && $_SESSION['validado'] != 1 ? 'data-toggle="tooltip" data-placement="top" title="Necesitas validar tu cuenta"' : '';
                 echo '<button type="button" class="btn btn-primary col-md-12" style="margin-top: 15px" onclick="javascript:openModal(\'agregar_empleo\', ' . $_SESSION['validado'] . ')" ' . $enabled . '>Agregar Empleo</button>';
             } else {
                 echo ' <div style="margin-top: 50px"></div><h3>Postulaciones</h3>';
@@ -135,9 +142,37 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                                       rows="10"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="password">Sueldo mensualk</label>
+                            <label for="password">Sueldo mensual</label>
                             <input type="number" class="form-control" name="sueldo" id="sueldo"
                                    placeholder="Ingresa el sueldo mensual">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="formControlRange">Categoria</label>
+                                    <select class="custom-select" name="categoria">
+                                        <option selected>Seleccionar</option>
+                                        <option value="1">Administración</option>
+                                        <option value="2">Finanzas</option>
+                                        <option value="2">Tecnologia</option>
+                                        <option value="3">Ventas</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="formControlRange">Tipo de contrato</label>
+                                    <select class="custom-select" name="tipo">
+                                        <option selected>Seleccionar</option>
+                                        <option value="1">Tiempo completo</option>
+                                        <option value="2">Medio tiempo</option>
+                                        <option value="3">Indeterminado</option>
+                                        <option value="4">Determinado</option>
+                                        <option value="5">Temporal</option>
+                                        <option value="6">Otro</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                 </div>
                 <div class="modal-footer">

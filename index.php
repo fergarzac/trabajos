@@ -1,6 +1,9 @@
 <?php
 $title = 'Inicio';
 require 'funciones/head.php';
+$totalEmpleos = getTotalEmpleos();
+
+$h1 = $totalEmpleos == 1 ? " trabajo disponible" : " trabajos disponibles";
 ?>
 <div class="bg">
     <img src="recursos/imagenes/background.jpg" />
@@ -9,7 +12,7 @@ require 'funciones/head.php';
     
     <div class="row">
         <div class="buscador">
-            <center><h1>Hay 100 trabajos disponibles.</h1></center>
+            <center><h1>Hay <?php echo $totalEmpleos . $h1?>.</h1></center>
             <form action="dashboard.php" method="GET">
                 <input type="text" class="input-buscar" name="buscar" placeholder="Buscar Trabajo" autocomplete="off"/>
                 <input type="submit" class="btn-buscar mt" value="Buscar">
@@ -109,10 +112,6 @@ require 'funciones/head.php';
                 </div>
                 <div class="modal-body">
                 <form action="register.php" method="POST" onsubmit="return validation()">
-                    <div class="form-group">
-                        <label for="nombre">Nombre</label>
-                        <input autocomplete="off" type="text" class="form-control" name="nombre" id="nombre" aria-describedby="emailHelp" placeholder="Ingresa nombre completo o nombre de la empresa">
-                    </div>
                     <div class="form-group">
                         <label for="usuario">Email</label>
                         <input autocomplete="off" type="email" class="form-control" name="usuario_registrar" id="usuario_registrar" aria-describedby="emailHelp" placeholder="Ingresa tu usuario">

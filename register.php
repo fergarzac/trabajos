@@ -28,6 +28,8 @@ if($con !== null) {
             $res = $result2->fetch_assoc();
             $_SESSION['idusuario'] = $res['idusuarios'];
             $_SESSION['tipo'] = $res['tipo'];
+            $_SESSION['fecha'] = $res['creado_el'];
+            $_SESSION['validado'] = $res['validado'];
             unset($_SESSION['error']);
             header('location:dashboard.php');
         }else{
