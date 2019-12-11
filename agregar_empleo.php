@@ -19,9 +19,12 @@ if($con !== null) {
     $descripcion = nl2br($_POST['descripcion']);
     $sueldo = $_POST['sueldo'];
     $categoria = $_POST['categoria'];
+    $ciudad = $_POST['ciudad'];
+    $estado = $_POST['estado'];
+    $vacantes = $_POST['vacantes'];
     $tipo_contrato = $_POST['tipo'];
     $idempresa = $_SESSION['idusuario'];
-    $sql = "INSERT INTO empleos(titulo, descripcion, sueldo, categoria, tipo_contrato, idempresa) VALUES ('$titulo', '$descripcion','$sueldo','$categoria','$tipo_contrato','$idempresa')";
+    $sql = "INSERT INTO empleos(titulo, descripcion, sueldo,ciudad, estado_x, categoria, tipo_contrato,vacantes, idempresa) VALUES ('$titulo', '$descripcion','$sueldo','$ciudad','$estado','$categoria','$tipo_contrato','$vacantes','$idempresa')";
     $result = $con->query($sql);
     if($result) {
         unset($_SESSION['error']);

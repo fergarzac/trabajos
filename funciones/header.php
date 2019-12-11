@@ -21,7 +21,7 @@ foreach ($listaNotificaciones as $n) {
     }
 
 }
-$perfil = isset($_SESSION['idusuario']) ? '<li class="nav-item">
+$perfil = isset($_SESSION['idusuario']) && $_SESSION['tipo'] != 3 ? '<li class="nav-item">
 <a class="nav-link" href="perfil.php" tabindex="-1" aria-disabled="true">Perfil</a>
 </li>' : '';
 

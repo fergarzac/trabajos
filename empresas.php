@@ -20,7 +20,7 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
         <?php if (isset($modales)) echo $modales; ?>
         <div class="row">
             <?php
-            if (isset($_SESSION['validado']) && $_SESSION['validado'] == 0) {
+            if (isset($_SESSION['validado']) && $_SESSION['validado'] == 0 && $_SESSION['tipo'] != 3) {
                 echo '<div class="col-md-12" style="margin-top: 15px"><div class="alert alert-warning" role="alert">
                           No haz validado tu cuenta, da click <a href="perfil.php?toValidate=1" >Aqui</a>
                         </div></div>';
@@ -141,10 +141,37 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                             <textarea class="form-control rounded-0" name="descripcion" id="descripcion"
                                       rows="10"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="password">Sueldo mensual</label>
-                            <input type="number" class="form-control" name="sueldo" id="sueldo"
-                                   placeholder="Ingresa el sueldo mensual">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Estado</label>
+                                    <input type="number" class="form-control" name="estado" id="estado"
+                                           placeholder="Ingresa el estado">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Ciudad</label>
+                                    <input type="number" class="form-control" name="ciudad" id="ciudad"
+                                           placeholder="Ingresa la ciudad">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Sueldo mensual</label>
+                                    <input type="number" class="form-control" name="sueldo" id="sueldo"
+                                           placeholder="Ingresa el sueldo mensual">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Vacantes</label>
+                                    <input type="number" class="form-control" name="vacantes" id="vacantes"
+                                           placeholder="Ingresa el numero de vacantes">
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">

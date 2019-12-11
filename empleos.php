@@ -19,7 +19,7 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
         <?php if (isset($modales)) echo $modales; ?>
         <div class="row">
             <?php
-            if (isset($_SESSION['validado']) && $_SESSION['validado'] == 0) {
+            if (isset($_SESSION['validado']) && $_SESSION['validado'] == 0 && $_SESSION['tipo'] != 3) {
                 echo '<div class="col-md-12" style="margin-top: 15px"><div class="alert alert-warning" role="alert">
                           No haz validado tu cuenta, da click <a href="perfil.php?toValidate=1" >Aqui</a>
                         </div></div>';

@@ -112,7 +112,7 @@ if(!$validate) {
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="password">Telefono</label>
-                                            <input type="text" class="form-control" name="telefono_contacto" id="telefono_contacto" value="<?php echo isset($data) && !empty($data) ? $data['telefono_contacto'] : '' ?>"
+                                            <input maxlength="10" minlength="10" type="text" class="form-control" name="telefono_contacto" id="telefono_contacto" value="<?php echo isset($data) && !empty($data) ? $data['telefono_contacto'] : '' ?>"
                                                    placeholder="Ingresa el telefono del contacto" autocomplete="off" required>
                                         </div>
                                     </div>
@@ -182,7 +182,7 @@ if(!$validate) {
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="password">Telefono</label>
-                            <input type="text" class="form-control" name="telefono" id="telefono"
+                            <input maxlength="10" minlength="10" type="text" class="form-control" name="telefono" id="telefono"
                                    placeholder="Ingresa tu telefono" value="<?php echo isset($data) && !empty($data) ? $data['telefono'] : '' ?>">
                         </div>
                     </div>

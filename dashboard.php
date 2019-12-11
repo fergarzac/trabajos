@@ -21,7 +21,7 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
         <?php if (isset($modales)) echo $modales; ?>
         <div class="row">
             <?php
-            if (isset($_SESSION['validado']) && $_SESSION['validado'] == 0) {
+            if (isset($_SESSION['validado']) && ($_SESSION['validado'] == 0 && $_SESSION['tipo'] != 3)) {
                 echo '<div class="col-md-12" style="margin-top: 15px"><div class="alert alert-warning" role="alert">
                           No haz validado tu cuenta, da click <a href="perfil.php?toValidate=1" >Aqui</a>
                         </div></div>';
@@ -132,14 +132,21 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                         echo '<h3>Sin resultados</h3>';
                     }
                     foreach ($paginacion['empleos'] as $key => $data) {
+                        $logo = isset($data['logo']) && !empty($data['logo']) ? $data['logo'] : 'https://via.placeholder.com/150';
+                        $nombre = isset($data['nombre']) ? $data['nombre'] : "";
                         echo '<div class="card" style="margin: 5px">
                                   <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-10">
+                                        <div class="col-md-2">
+                                            <img src="' . $logo .'" style="width: 100%" class="rounded float-left" alt="">
+                                        </div>
+                                        <div class="col-md-8">
                                             <span class="txt-15 bold">' . $data['titulo'] . '</span><br>
                                             <span class="txt-12">' . explode('<',$data['descripcion'])[0] . '</span><br>
                                             <span class="txt-10">$ ' . $data['sueldo'] . '</span><br>
+                                            <span class="txt-10">' . $nombre . '</span><br>
                                             <span class="txt-8" style="color: darkgrey"> ' . date_format(date_create($data['creado_el']), 'd/m/Y') . '</span>
+                                            
                                         </div>
                                         <div class="col-md-2">
                                             <a href="empleo.php?id=' . $data['idempleos'] . '"  style="float: right">
@@ -222,11 +229,39 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                             <textarea class="form-control rounded-0" name="descripcion" id="descripcion"
                                       rows="10"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="password">Sueldo mensual</label>
-                            <input type="number" class="form-control" name="sueldo" id="sueldo"
-                                   placeholder="Ingresa el sueldo mensual">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Estado</label>
+                                    <input  class="form-control" name="estado" id="estado"
+                                           placeholder="Ingresa el estado">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Ciudad</label>
+                                    <input  class="form-control" name="ciudad" id="ciudad"
+                                           placeholder="Ingresa la ciudad">
+                                </div>
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Sueldo mensual</label>
+                                    <input type="number" class="form-control" name="sueldo" id="sueldo"
+                                           placeholder="Ingresa el sueldo mensual">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Vacantes</label>
+                                    <input type="number" class="form-control" name="vacantes" id="vacantes"
+                                           placeholder="Ingresa el numero de vacantes">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -237,6 +272,7 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                                         <option value="2">Finanzas</option>
                                         <option value="3">Tecnologia</option>
                                         <option value="4">Ventas</option>
+
                                     </select>
                                 </div>
                             </div>

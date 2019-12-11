@@ -9,6 +9,24 @@ echo '
 $(document).ready(function() {
     $("body").tooltip({ selector: \'[data-toggle=tooltip]\' });
 });
+    
+$(function(){
+    $("#telefono_contacto").keydown(function(event){
+        //alert(event.keyCode);
+        if((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !==190  && event.keyCode !==110 && event.keyCode !==8 && event.keyCode !==9  ){
+            return false;
+        }
+    });
+});
+
+$(function(){
+    $("#telefono").keydown(function(event){
+        //alert(event.keyCode);
+        if((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !==190  && event.keyCode !==110 && event.keyCode !==8 && event.keyCode !==9  ){
+            return false;
+        }
+    });
+});
 </script>
 </body>
 </html>';

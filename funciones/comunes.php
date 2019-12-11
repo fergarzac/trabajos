@@ -27,7 +27,8 @@ function clearData($data){
 function todosLosEmpleos() {
     $con = getConnection();
     if($con !== null) {
-        $sql = "SELECT * FROM empleos ORDER BY creado_el DESC";
+        $condicion = isset($_SESSION['tipo']) && $_SESSION['tipo'] == 2 ? 'WHERE empleos.estado = 1 AND empleos.idempresa IN (SELECT idusuarios FROM usuarios WHERE validado = 1 and tipo = 1)' : '';
+        $sql = "SELECT * FROM empleos LEFT JOIN info_empresa ON info_empresa.idempresa = empleos.idempresa ".$condicion." ORDER BY creado_el DESC";
         $result = $con->query($sql);
         if($result && $result->num_rows>0){
             return $result->fetch_all(MYSQLI_ASSOC);
@@ -506,6 +507,45 @@ function getSeleccionados() {
             return $result->fetch_all(MYSQLI_ASSOC);
         }
         return [];
+    }
+    return false;
+}
+
+function totalVacantes($id) {
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT vacantes FROM empleos WHERE idempleos = '$id'";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC)[0]['vacantes'];
+        }
+        return [];
+    }
+    return false;
+}
+
+function totalSeleccionados($id) {
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT count(*) as total FROM seleccionado WHERE idempleo = '$id'";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC)[0]['total'];
+        }
+        return [];
+    }
+    return false;
+}
+
+function estadoDeEmpleo($id){
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT estado FROM empleos WHERE idempleos = '$id'";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC)[0]['estado'] == 1;
+        }
+        return false;
     }
     return false;
 }

@@ -17,6 +17,10 @@ if($con !== null) {
     $sql = "INSERT INTO seleccionado(idusuario, idempleo, idempresa) VALUES ('$idusuario', '$idempleo','$idempresa')";
     $result = $con->query($sql);
     if($result) {
+        if(totalSeleccionados($idempleo) == totalVacantes($idempleo)){
+            $sql = "UPDATE empleos SET estado = 0 WHERE idempleos = '$idempleo'";
+            $result = $con->query($sql);
+        }
         $_SESSION['notificacion'] = "Seleccionado";
         unset($_SESSION['error']);
     }else{

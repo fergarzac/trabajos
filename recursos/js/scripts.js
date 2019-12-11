@@ -61,7 +61,7 @@ function ValidarDatos(){
     var nombre_contacto = document.getElementById('nombre_contacto');
     var telefono_contacto = document.getElementById('telefono_contacto');
     if(rfc.value.length > 0 && nombre_contacto.value.length > 0 && telefono_contacto.value.length > 0 && sat.value.length > 0 && tipo.value.length > 0 && nombre.value.length > 0 && ciudad.value.length > 0 && estado.value.length > 0 && descripcion.value.length > 0 && sitio_web.value.length > 0 && direccion.value.length > 0) return true;
-
+    alert('Llena todos los campos');
     return false;
 }
 
@@ -69,7 +69,7 @@ function ValidarDatosUsuario(){
     var nombre = document.getElementById('nombre');
     var telefono = document.getElementById('telefono');
     if(nombre.value.length > 0 && telefono.value.length > 0 ) return true;
-
+    alert('Llena todos los campos');
     return false;
 }
 
@@ -101,3 +101,4 @@ function hideAll(paneles){
         document.getElementById(e).style.display = "none";
     });
 }
+

@@ -50,7 +50,11 @@ $visitas = numerodeVisitas($_GET['id']);
             </div>
             </p>
             <p>
-                <?php echo $data['descripcion']; ?>
+                <?php echo $data['descripcion']; ?><br><br>
+                Tipo de contrato: <?php echo $data['tipo_contrato']; ?><br><br>
+                Categoria: <?php echo $data['categoria']; ?><br><br>
+                Sueldo: <?php echo $data['sueldo']; ?><br><br>
+                Vacantes: <?php echo $data['vacantes']; ?><br><br>
             </p>
             <?php if (!isset($_SESSION['tipo'])): ?>
                 <div class="row">
@@ -86,6 +90,7 @@ $visitas = numerodeVisitas($_GET['id']);
                         <div class="accordion" id="accordionExample">
                         <form action="seleccionar.php" method="POST">
                         <?php
+                        $seleccionar = estadoDeEmpleo($_GET['id']) ? '<button type="submit" class="btn btn-primary" >Seleccionar</button>' : '';
                         foreach ($postulantes as $e) {
                             $buttonCurriculum = !empty($e['curriculum']) ? '<a class="btn btn-primary" target="_blank" href="'.$e['curriculum'].'">Ver curriculum</a>' :
                                 '<button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="No tiene curriculum">Ver curriculum</button>';
@@ -110,7 +115,7 @@ $visitas = numerodeVisitas($_GET['id']);
                                         '.$buttonCurriculum.'
                                         <input type="hidden" name="idusuario" value="'.$e['idusuario'].'" />
                                         <input type="hidden" name="idempleo" value="'.$_GET['id'].'" />
-                                        <button type="submit" class="btn btn-primary" href="'.$e['curriculum'].'">Seleccionar</button>
+                                        '.$seleccionar.'
                                       </div>
                                     </div>
                                   </div>';

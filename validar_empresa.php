@@ -33,11 +33,11 @@ if($con !== null) {
             ('$idempresa', '$nombre', '$rfc', '$numero_sat', '$estado', '$ciudad', '$direccion', '$tipo_empresa', '$descripcion', '$sitio_web', '$nombre_contacto', '$telefono_contacto', '$urllogo')";
     $result = $con->query($sql);
     if($result) {
-        $sql2 = "UPDATE usuarios SET validado = 1 WHERE idusuarios = '$idempresa'";
+        $sql2 = "UPDATE usuarios SET validado = 2 WHERE idusuarios = '$idempresa'";
         $result2 = $con->query($sql2);
         if($result2) {
             unset($_SESSION['error']);
-            $_SESSION['validado'] = 1;
+            $_SESSION['validado'] = 2;
             header('location:dashboard.php');
         }else{
             $_SESSION['error'] = 'Pendiente de validacion.';
