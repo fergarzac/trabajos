@@ -12,6 +12,9 @@ if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
     $h1 = 'Todos los empleos';
     $empleos = todosLosEmpleos();
 }
+
+$categorias = getCategorias();
+
 $pagina = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
 $paginacion = empleosPaginados($empleos, $pagina);
 $nextPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['page']) < $paginacion['paginas'] ? intval($_GET['page']) + 1 : 2;
@@ -96,10 +99,11 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                                                         <label for="formControlRange">Categoria</label>
                                                         <select class="custom-select" name="categoria">
                                                             <option value="" selected>Seleccionar</option>
-                                                            <option value="1">Administración</option>
-                                                            <option value="2">Finanzas</option>
-                                                            <option value="2">Tecnologia</option>
-                                                            <option value="3">Ventas</option>
+                                                            <?php
+                                                            foreach($categorias as $d){
+                                                                echo '<option value="'.$d['idcategoria_empleos'].'">'.$d['nombre'].'</option>';
+                                                            }
+                                                            ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -268,11 +272,11 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                                     <label for="formControlRange">Categoria</label>
                                     <select class="custom-select" name="categoria">
                                         <option selected>Seleccionar</option>
-                                        <option value="1">Administración</option>
-                                        <option value="2">Finanzas</option>
-                                        <option value="3">Tecnologia</option>
-                                        <option value="4">Ventas</option>
-
+                                        <?php
+                                        foreach($categorias as $d){
+                                            echo '<option value="'.$d['idcategoria_empleos'].'">'.$d['nombre'].'</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>

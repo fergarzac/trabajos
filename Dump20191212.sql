@@ -16,6 +16,20 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `categoria_empleos`
+--
+
+DROP TABLE IF EXISTS `categoria_empleos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `categoria_empleos` (
+  `idcategoria_empleos` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(80) DEFAULT NULL,
+  PRIMARY KEY (`idcategoria_empleos`)
+) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `empleos`
 --
 
@@ -27,15 +41,18 @@ CREATE TABLE `empleos` (
   `titulo` varchar(45) CHARACTER SET latin1 NOT NULL,
   `descripcion` text CHARACTER SET latin1 NOT NULL,
   `sueldo` varchar(45) CHARACTER SET latin1 NOT NULL,
-  `categoria` enum('Administracion','Finanzas','Tecnologia','Ventas') DEFAULT NULL,
+  `ciudad` varchar(45) NOT NULL,
+  `estado_x` varchar(45) DEFAULT NULL,
+  `categoria` int(11) DEFAULT NULL,
   `tipo_contrato` enum('Tiempo completo','Medio tiempo','Indeterminado','Determinado','Temporal','Otro') DEFAULT NULL,
+  `vacantes` int(11) NOT NULL DEFAULT '1',
   `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `editado_el` timestamp NULL DEFAULT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT '1',
   `idempresa` int(11) NOT NULL,
   PRIMARY KEY (`idempleos`),
   KEY `empresa_idx` (`idempresa`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +118,7 @@ CREATE TABLE `notificaciones` (
   `idaux` int(11) DEFAULT NULL,
   `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idnotificaciones`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -117,7 +134,7 @@ CREATE TABLE `postulaciones` (
   `idempleo` int(11) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idpostulaciones`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,7 +151,7 @@ CREATE TABLE `seleccionado` (
   `idempresa` int(11) DEFAULT NULL,
   `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idseleccionado`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,7 +186,7 @@ CREATE TABLE `vistas` (
   `idempleo` int(11) NOT NULL,
   `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idvistas`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -181,4 +198,4 @@ CREATE TABLE `vistas` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-06  1:49:23
+-- Dump completed on 2019-12-12 11:29:19

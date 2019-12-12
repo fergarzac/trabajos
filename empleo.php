@@ -17,7 +17,7 @@ if(isset($_SESSION['tipo']) && $_SESSION['tipo'] == "1"){
 }elseif (isset($_SESSION['tipo']) && $_SESSION['tipo'] == "2") {
     agregarVisita($_SESSION['idusuario'], $_GET['id']);
 }
-
+$categorias = getCategorias();
 if($data == false || empty($data)) header('location:dashboard.php');
 $visitas = numerodeVisitas($_GET['id']);
 
@@ -44,7 +44,7 @@ $visitas = numerodeVisitas($_GET['id']);
                 </div>
                 <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == "1"):?>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-info btn-sm" style="float: right">Modificar</button>
+                        <button type="submit" class="btn btn-info btn-sm" style="float: right" onclick="javascript:openModal('modificar_empleo', '<?php echo $_SESSION['validado'] ?>')">Modificar</button>
                     </div>
                 <?php endif; ?>
             </div>
@@ -52,7 +52,9 @@ $visitas = numerodeVisitas($_GET['id']);
             <p>
                 <?php echo $data['descripcion']; ?><br><br>
                 Tipo de contrato: <?php echo $data['tipo_contrato']; ?><br><br>
-                Categoria: <?php echo $data['categoria']; ?><br><br>
+                Categoria: <?php echo empty($data['nom_categoria']) ? 'Sin Categoria' : $data['nom_categoria']; ?><br><br>
+                Ciudad: <?php echo empty($data['ciudad']) ? '' : $data['ciudad']; ?><br><br>
+                Estado: <?php echo empty($data['estado_x']) ? '' : $data['estado_x']; ?><br><br>
                 Sueldo: <?php echo $data['sueldo']; ?><br><br>
                 Vacantes: <?php echo $data['vacantes']; ?><br><br>
             </p>
@@ -68,17 +70,24 @@ $visitas = numerodeVisitas($_GET['id']);
                         <?php
                             $enabled = '';
                             $type = 'submit';
-                            if(isset($_SESSION['validado']) && $_SESSION['validado']  !== 1 ) {
+                            if(isset($_SESSION['validado']) && $_SESSION['validado']  != 1 ) {
                                 $enabled = 'data-toggle="tooltip" data-placement="top" title="Necesitas validar tu cuenta"';
                                 $type = 'button';
-                            }else if(yaEstapostulado($_SESSION['idusuario'], $data['idempleos'])){
-                                $enabled = 'data-toggle="tooltip" data-placement="top" title="Ya te haz postulado a este empleo"';
-                                $type = 'button';
                             }
-                            echo '<form action="postularse.php" method="POST">
+
+                            if(!yaEstapostulado($_SESSION['idusuario'], $data['idempleos'])){
+                                echo '<form action="postularse.php" method="POST">
                                     <input type="hidden"  name="idempleo" id="idempleo" value="'.$data['idempleos'].'">
                                     <button type="'.$type.'" class="btn btn-info" ' . $enabled . '>Postularte</button>
                                 </form>';
+                            }else{
+                                echo '<span class="badge badge-primary">Ya estas postulado</span>';
+                                echo '<form action="despostularse.php" method="POST">
+                                    <input type="hidden"  name="idempleo" id="idempleo" value="'.$data['idempleos'].'">
+                                    <button type="submit" class="btn btn-sm btn-info">Deshacer</button>
+                                </form>';
+                            }
+
                         ?>
 
                     </div>
@@ -157,7 +166,117 @@ $visitas = numerodeVisitas($_GET['id']);
         </div>
 
     </div>
+    <?php if(isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1): ?>
+        <div class="modal fade" id="modificar_empleo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modificar Empleo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="modificar_empleo.php" method="POST" onsubmit="return ValidarEmpleo()">
+                        <input name="idempleo" type="hidden" value="<?php echo $_GET['id'] ?>">
+                        <div class="form-group">
+                            <label for="nombre">Puesto</label>
+                            <input type="text" class="form-control" name="puesto" id="puesto"
+                                   aria-describedby="emailHelp" placeholder="Ingresa puesto requerido"
+                                   value="<?php echo isset($data['titulo']) ? $data['titulo']: '' ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="usuario">Descripcion</label>
+                            <textarea class="form-control rounded-0" name="descripcion" id="descripcion"
+                                      rows="10"><?php echo isset($data['descripcion']) ? $data['descripcion']: '' ?></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Estado</label>
+                                    <input  class="form-control" name="estado" id="estado"
+                                            placeholder="Ingresa el estado"
+                                            value="<?php echo isset($data['estado_x']) ? $data['estado_x']: '' ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Ciudad</label>
+                                    <input  class="form-control" name="ciudad" id="ciudad"
+                                            placeholder="Ingresa la ciudad"
+                                            value="<?php echo isset($data['ciudad']) ? $data['ciudad']: '' ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Sueldo mensual</label>
+                                    <input type="number" class="form-control" name="sueldo" id="sueldo"
+                                           placeholder="Ingresa el sueldo mensual"
+                                           value="<?php echo isset($data['sueldo']) ? $data['sueldo']: '' ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Vacantes</label>
+                                    <input type="number" class="form-control" name="vacantes" id="vacantes"
+                                           placeholder="Ingresa el numero de vacantes"
+                                           value="<?php echo isset($data['vacantes']) ? $data['vacantes']: '' ?>">
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="formControlRange">Categoria</label>
+                                    <select class="custom-select" name="categoria">
+                                        <?php
+                                        if(isset($data['categoria'])){
+                                            echo '<option>Seleccionar</option>';
+                                        }else{
+                                            echo '<option selected>Seleccionar</option>';
+                                        }
+                                        foreach($categorias as $d){
+                                            if($d['idcategoria_empleos'] == $data['categoria']){
+                                                echo '<option selected value="'.$d['idcategoria_empleos'].'">'.$d['nombre'].'</option>';
+                                            }else{
+                                                echo '<option value="'.$d['idcategoria_empleos'].'">'.$d['nombre'].'</option>';
+                                            }
+
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="formControlRange">Tipo de contrato</label>
+                                    <select class="custom-select" name="tipo">
+                                        <option value="0" selected>Seleccionar</option>
+                                        <option value="1">Tiempo completo</option>
+                                        <option value="2">Medio tiempo</option>
+                                        <option value="3">Indeterminado</option>
+                                        <option value="4">Determinado</option>
+                                        <option value="5">Temporal</option>
+                                        <option value="6">Otro</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Modificar</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+    <?php endif; ?>
 </div>
 <?php
 require 'funciones/footer.php';

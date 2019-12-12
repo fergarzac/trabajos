@@ -110,9 +110,10 @@ function getDataEmpleo($id = 0) {
     $con = getConnection();
     $id = intval($id);
     if($con !== null && $id > 0) {
-        $sql = "SELECT * FROM empleos 
+        $sql = "SELECT empleos.*, info_empresa.*,usuarios.*, categoria_empleos.nombre as nom_categoria FROM empleos 
                 LEFT JOIN info_empresa ON empleos.idempresa = info_empresa.idempresa 
                 LEFT JOIN usuarios ON empleos.idempresa = usuarios.idusuarios
+                LEFT JOIN categoria_empleos ON categoria_empleos.idcategoria_empleos = empleos.categoria
                 where empleos.idempleos='$id'";
         $result = $con->query($sql);
         if($result && $result->num_rows>0){
@@ -546,6 +547,20 @@ function estadoDeEmpleo($id){
             return $result->fetch_all(MYSQLI_ASSOC)[0]['estado'] == 1;
         }
         return false;
+    }
+    return false;
+}
+
+/* Obtiene las categorias */
+function getCategorias() {
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT * FROM categoria_empleos";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+        return [];
     }
     return false;
 }

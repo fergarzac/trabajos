@@ -179,10 +179,11 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                                     <label for="formControlRange">Categoria</label>
                                     <select class="custom-select" name="categoria">
                                         <option selected>Seleccionar</option>
-                                        <option value="1">Administración</option>
-                                        <option value="2">Finanzas</option>
-                                        <option value="2">Tecnologia</option>
-                                        <option value="3">Ventas</option>
+                                        <?php
+                                        foreach($categorias as $d){
+                                            echo '<option value="'.$d['idcategoria_empleos'].'">'.$d['nombre'].'</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
