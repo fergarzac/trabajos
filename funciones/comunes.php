@@ -418,6 +418,19 @@ function yaEstapostulado($idusuario, $idempleo) {
     return false;
 }
 
+/* Verifica si un usuario ya esta seleccionado a un empleo */
+function yaEstaseleccionado($idusuario, $idempleo) {
+    $con = getConnection();
+    if($con !== null && $idusuario > 0 && $idempleo > 0) {
+        $sql = "SELECT * FROM seleccionado where idempleo = '$idempleo' AND idusuario = $idusuario";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return true;
+        }
+    }
+    return false;
+}
+
 /* Sube los archivos a la carpeta upload y regresa la ruta y nombre con la que se guardo */
 function uploadFile($file){
     $target_dir = "uploads/";

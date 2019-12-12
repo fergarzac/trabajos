@@ -101,6 +101,8 @@ $visitas = numerodeVisitas($_GET['id']);
                         <?php
                         $seleccionar = estadoDeEmpleo($_GET['id']) ? '<button type="submit" class="btn btn-primary" >Seleccionar</button>' : '';
                         foreach ($postulantes as $e) {
+                            if(yaEstaseleccionado($e['idusuario'], $_GET['id'])) $seleccionar =  '';
+
                             $buttonCurriculum = !empty($e['curriculum']) ? '<a class="btn btn-primary" target="_blank" href="'.$e['curriculum'].'">Ver curriculum</a>' :
                                 '<button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="No tiene curriculum">Ver curriculum</button>';
                             echo '<div class="card">
