@@ -5,6 +5,11 @@ $label = '<span class="sr-only">(current)</span>';
 if(isset($_SESSION['tipo'])) {
     $numNotificaciones = getNumeroNotificationes($_SESSION['idusuario'], $_SESSION['tipo'],  $_SESSION['fecha']);
     $listaNotificaciones = getNotificationes($_SESSION['idusuario'], $_SESSION['tipo'],  $_SESSION['fecha']);
+    $listaNotificaciones = array_map(function($notificacion){
+        if(empty($notificacion['para']) || (!empty($notificacion['para']) && $notificacion['para'] == $_SESSION['idusuario'])){
+            return $notificacion;
+        }
+    },$listaNotificaciones);
 }else{
     $numNotificaciones = 0;
     $listaNotificaciones = [];
