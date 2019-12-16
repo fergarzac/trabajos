@@ -9,6 +9,8 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $empleos = empleosByEmpresa($_GET['id']);
 $datosEmpresa = empresasById($_GET['id']);
 
+$categorias = getCategorias();
+$estados = getEstados();
 $h1 = "Empleos de la empresa " . $datosEmpresa['nombre'];
 $pagina = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
 $paginacion = empleosPaginados($empleos, $pagina);
@@ -87,7 +89,8 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
             <?php
             if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
                 $enabled = isset($_SESSION['validado']) && $_SESSION['validado'] == 0 ? 'data-toggle="tooltip" data-placement="top" title="Necesitas validar tu cuenta"' : '';
-                echo '<button type="button" class="btn btn-primary col-md-12" style="margin-top: 15px" onclick="javascript:openModal(\'agregar_empleo\', ' . $_SESSION['validado'] . ')" ' . $enabled . '>Agregar Empleo</button>';
+                $class = isset($_SESSION['validado']) && $_SESSION['validado'] != 1 ? 'secondary' : 'primary';
+                echo '<button type="button" class="btn btn-'.$class.' col-md-12" style="margin-top: 15px" onclick="javascript:openModal(\'agregar_empleo\', ' . $_SESSION['validado'] . ')" ' . $enabled . '>Agregar Empleo</button>';
             } else {
                 echo ' <div style="margin-top: 50px"></div><h3>Postulaciones</h3>';
                 foreach ($mis_postulaciones as $e) {
@@ -134,10 +137,73 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                             <textarea class="form-control rounded-0" name="descripcion" id="descripcion"
                                       rows="10"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="password">Sueldo mensualk</label>
-                            <input type="number" class="form-control" name="sueldo" id="sueldo"
-                                   placeholder="Ingresa el sueldo mensual">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Estado</label>
+                                    <select class="custom-select" name="estado" id="estado" onchange="getCiudades(this)">
+                                        <option selected>Seleccionar</option>
+                                        <?php
+                                        foreach($estados as $d){
+                                            echo '<option value="'.$d['idestados'].'">'.$d['estado'].'</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Ciudad</label>
+                                    <select class="custom-select" name="ciudad" id="ciudad">
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Sueldo mensual</label>
+                                    <input type="number" class="form-control" name="sueldo" id="sueldo"
+                                           placeholder="Ingresa el sueldo mensual">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Vacantes</label>
+                                    <input type="number" class="form-control" name="vacantes" id="vacantes"
+                                           placeholder="Ingresa el numero de vacantes">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="formControlRange">Categoria</label>
+                                    <select class="custom-select" name="categoria">
+                                        <option selected>Seleccionar</option>
+                                        <?php
+                                        foreach($categorias as $d){
+                                            echo '<option value="'.$d['idcategoria_empleos'].'">'.$d['nombre'].'</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="formControlRange">Tipo de contrato</label>
+                                    <select class="custom-select" name="tipo">
+                                        <option selected>Seleccionar</option>
+                                        <option value="1">Tiempo completo</option>
+                                        <option value="2">Medio tiempo</option>
+                                        <option value="3">Indeterminado</option>
+                                        <option value="4">Determinado</option>
+                                        <option value="5">Temporal</option>
+                                        <option value="6">Otro</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                 </div>
                 <div class="modal-footer">

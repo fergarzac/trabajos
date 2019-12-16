@@ -26,6 +26,8 @@ if(!$validate) {
         $avanzado = $data['ingles'] == "Avanzado" ? "selected" : "";
     }
 }
+
+$tipos = getTiposEmpresas();
 ?>
 <?php
     if(isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
@@ -67,8 +69,19 @@ if(!$validate) {
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="password">Tipo de Empresa</label>
-                                    <input type="text" class="form-control" name="tipo_empresa" id="tipo_empresa" value="<?php echo isset($data) && !empty($data) ? $data['tipo_empresa'] : '' ?>"
-                                           placeholder="Ingresa el giro de la empresa" autocomplete="off" required>
+                                    <select class="custom-select" name="tipo_empresa" id="tipo_empresa">
+                                        <option selected>Seleccionar</option>
+                                        <?php
+                                        foreach($tipos as $d){
+                                            if(isset($data['tipo_empresa']) && $data['tipo_empresa'] == $d['idtipos_empresa']){
+                                                echo '<option selected value="'.$d['idtipos_empresa'].'">'.$d['tipo'].'</option>';
+                                            }else{
+                                                echo '<option value="'.$d['idtipos_empresa'].'">'.$d['tipo'].'</option>';
+                                            }
+
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -239,7 +252,7 @@ if(!$validate) {
                     <div class="col-md-12">
                         <label>Curriculum</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="curriculum" name="curriculum">
+                            <input onchange="alert('Haz seleccionado un nuevo curriculum.')" type="file" class="custom-file-input" id="curriculum" name="curriculum">
                             <label class="custom-file-label" for="curriculum">Selecciona tu curriculum</label>
                         </div>
                     </div>

@@ -30,6 +30,21 @@ CREATE TABLE `categoria_empleos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `ciudades`
+--
+
+DROP TABLE IF EXISTS `ciudades`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ciudades` (
+  `idciudad` int(11) NOT NULL AUTO_INCREMENT,
+  `idestado` int(11) NOT NULL,
+  `ciudad` varchar(45) NOT NULL,
+  PRIMARY KEY (`idciudad`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `empleos`
 --
 
@@ -41,8 +56,8 @@ CREATE TABLE `empleos` (
   `titulo` varchar(45) CHARACTER SET latin1 NOT NULL,
   `descripcion` text CHARACTER SET latin1 NOT NULL,
   `sueldo` varchar(45) CHARACTER SET latin1 NOT NULL,
-  `ciudad` varchar(45) NOT NULL,
-  `estado_x` varchar(45) DEFAULT NULL,
+  `ciudad` int(11) DEFAULT NULL,
+  `estado_x` int(11) DEFAULT NULL,
   `categoria` int(11) DEFAULT NULL,
   `tipo_contrato` enum('Tiempo completo','Medio tiempo','Indeterminado','Determinado','Temporal','Otro') DEFAULT NULL,
   `vacantes` int(11) NOT NULL DEFAULT '1',
@@ -52,7 +67,61 @@ CREATE TABLE `empleos` (
   `idempresa` int(11) NOT NULL,
   PRIMARY KEY (`idempleos`),
   KEY `empresa_idx` (`idempresa`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `empleos`.`empleos_AFTER_INSERT` AFTER INSERT ON `empleos` FOR EACH ROW
+BEGIN
+	insert into notificaciones SET evento= '1', visto_por = '[]', idusuario = NEW.idempresa, idaux = NEW.idempleos;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `empleos`.`empleos_AFTER_UPDATE` AFTER UPDATE ON `empleos` FOR EACH ROW
+BEGIN
+IF NEW.estado = 0 THEN
+	insert into notificaciones SET evento= '3', visto_por = '[]', idusuario = NEW.idempresa, idaux = NEW.idempleos;
+ELSE 
+	insert into notificaciones SET evento= '2', visto_por = '[]', idusuario = NEW.idempresa, idaux = NEW.idempleos;
+end if;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `estados`
+--
+
+DROP TABLE IF EXISTS `estados`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `estados` (
+  `idestados` int(11) NOT NULL,
+  `estado` varchar(45) NOT NULL,
+  PRIMARY KEY (`idestados`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +139,7 @@ CREATE TABLE `info_empresa` (
   `estado` varchar(45) NOT NULL,
   `ciudad` varchar(45) NOT NULL,
   `direccion` varchar(45) NOT NULL,
-  `tipo_empresa` varchar(45) NOT NULL,
+  `tipo_empresa` int(11) NOT NULL,
   `introduccion` varchar(45) NOT NULL,
   `sitio_web` varchar(45) NOT NULL,
   `nombre_contacto` varchar(45) NOT NULL,
@@ -118,7 +187,7 @@ CREATE TABLE `notificaciones` (
   `idaux` int(11) DEFAULT NULL,
   `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idnotificaciones`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,7 +203,7 @@ CREATE TABLE `postulaciones` (
   `idempleo` int(11) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idpostulaciones`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +220,39 @@ CREATE TABLE `seleccionado` (
   `idempresa` int(11) DEFAULT NULL,
   `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idseleccionado`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `empleos`.`seleccionado_AFTER_INSERT` AFTER INSERT ON `seleccionado` FOR EACH ROW
+BEGIN
+insert into notificaciones SET evento= '4', visto_por = '[]', idusuario = NEW.idempresa, idaux = NEW.idempleo, para = NEW.idusuario;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `tipos_empresa`
+--
+
+DROP TABLE IF EXISTS `tipos_empresa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tipos_empresa` (
+  `idtipos_empresa` int(11) NOT NULL AUTO_INCREMENT,
+  `tipo` varchar(45) NOT NULL,
+  PRIMARY KEY (`idtipos_empresa`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,7 +287,7 @@ CREATE TABLE `vistas` (
   `idempleo` int(11) NOT NULL,
   `creado_el` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idvistas`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -198,4 +299,4 @@ CREATE TABLE `vistas` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-12 11:29:19
+-- Dump completed on 2019-12-16  3:46:48

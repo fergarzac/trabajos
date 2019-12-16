@@ -14,7 +14,7 @@ if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
 }
 
 $categorias = getCategorias();
-
+$estados = getEstados();
 $pagina = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
 $paginacion = empleosPaginados($empleos, $pagina);
 $nextPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['page']) < $paginacion['paginas'] ? intval($_GET['page']) + 1 : 2;
@@ -182,33 +182,36 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                     </div>
                 </div>
             </div>
-            <div class="col-md-3" style="background: #f8f9fa;margin: 10px;padding:15px">
-                <?php
-                if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
-                    $enabled = isset($_SESSION['validado']) && $_SESSION['validado'] != 1 ? 'data-toggle="tooltip" data-placement="top" title="Necesitas validar tu cuenta"' : '';
-                    echo '<button type="button" class="btn btn-primary col-md-12" style="margin-top: 15px" onclick="javascript:openModal(\'agregar_empleo\', ' . $_SESSION['validado'] . ')" ' . $enabled . '>Agregar Empleo</button>';
-                } else {
-                    echo ' <h3>Postulaciones</h3>';
-                    foreach ($mis_postulaciones as $e) {
-                        echo '<div class="card" style="margin: 10px" >
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        ' . $e['titulo'] . '
-                                    </div>
-                                    <div class="col-md-2">
-                                        <a href="empleo.php?id=' . $e['idempleo'] . '"  style="float: right">
-                                            <i class="fas fa-chevron-circle-right" style="font-size: 20pt"></i>
-                                        </a>
+            <?php if(isset($_SESSION['tipo']) && $_SESSION['tipo'] != 3){ ?>
+                <div class="col-md-3" style="background: #f8f9fa;margin: 10px;padding:15px">
+                    <?php
+                    if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
+                        $enabled = isset($_SESSION['validado']) && $_SESSION['validado'] != 1 ? 'data-toggle="tooltip" data-placement="top" title="Necesitas validar tu cuenta"' : '';
+                        $class = isset($_SESSION['validado']) && $_SESSION['validado'] != 1 ? 'secondary' : 'primary';
+                        echo '<button type="button" class="btn btn-'.$class.' col-md-12" style="margin-top: 15px" onclick="javascript:openModal(\'agregar_empleo\', ' . $_SESSION['validado'] . ')" ' . $enabled . '>Agregar Empleo</button>';
+                    } else {
+                        echo ' <h3>Postulaciones</h3>';
+                        foreach ($mis_postulaciones as $e) {
+                            echo '<div class="card" style="margin: 10px" >
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            ' . $e['titulo'] . '
+                                        </div>
+                                        <div class="col-md-2">
+                                            <a href="empleo.php?id=' . $e['idempleo'] . '"  style="float: right">
+                                                <i class="fas fa-chevron-circle-right" style="font-size: 20pt"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>';
+                            </div>';
+                        }
+                        echo '</div>';
                     }
-                    echo '</div>';
-                }
-                ?>
-            </div>
+                    ?>
+                </div>
+            <?php } ?>
         </div>
     </div>
     <div class="modal fade" id="agregar_empleo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -237,15 +240,22 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="password">Estado</label>
-                                    <input  class="form-control" name="estado" id="estado"
-                                           placeholder="Ingresa el estado">
+                                    <select class="custom-select" name="estado" id="estado" onchange="getCiudades(this)">
+                                        <option selected>Seleccionar</option>
+                                        <?php
+                                        foreach($estados as $d){
+                                            echo '<option value="'.$d['idestados'].'">'.$d['estado'].'</option>';
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="password">Ciudad</label>
-                                    <input  class="form-control" name="ciudad" id="ciudad"
-                                           placeholder="Ingresa la ciudad">
+                                    <select class="custom-select" name="ciudad" id="ciudad">
+
+                                    </select>
                                 </div>
                             </div>
                         </div>

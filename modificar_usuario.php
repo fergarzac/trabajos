@@ -18,7 +18,6 @@ if($con !== null) {
     $nombre = $_POST['nombre'];
     $telefono = $_POST['telefono'];
     $fecha_nacimiento = $_POST['fecha_nacimiento'];
-    $edad = $_POST['edad'];
 
     //Calcula tu edad
     $cumpleanos = new DateTime($fecha_nacimiento);
@@ -30,9 +29,10 @@ if($con !== null) {
     $disponibilidad = $_POST['disponibilidad'] == "on" ? true : false;
     $uploadCurriculum = isset($_FILES['curriculum']) ? uploadFile($_FILES['curriculum']) : ['status' => 0];
     $curriculum = $uploadCurriculum['status'] == 1 ? $uploadCurriculum['dir'] : '';
+    $cr = $curriculum != '' ? ", curriculum = '$curriculum'" : '';
     $idusuario = $_SESSION['idusuario'];
     $sql = "UPDATE info_usuario SET nombre = '$nombre', telefono = '$telefono', fecha_nacimiento = '$fecha_nacimiento', edad = '$edad', 
-            carrera = '$carrera', ingles = '$ingles', disponibilidad_viajar = '$disponibilidad', curriculum = '$curriculum' 
+            carrera = '$carrera', ingles = '$ingles', disponibilidad_viajar = '$disponibilidad' ".$cr."
             WHERE idusuario = '$idusuario'";
 
     $result = $con->query($sql);

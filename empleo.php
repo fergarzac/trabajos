@@ -53,10 +53,10 @@ $visitas = numerodeVisitas($_GET['id']);
                 <?php echo $data['descripcion']; ?><br><br>
                 Tipo de contrato: <?php echo $data['tipo_contrato']; ?><br><br>
                 Categoria: <?php echo empty($data['nom_categoria']) ? 'Sin Categoria' : $data['nom_categoria']; ?><br><br>
-                Ciudad: <?php echo empty($data['ciudad']) ? '' : $data['ciudad']; ?><br><br>
-                Estado: <?php echo empty($data['estado_x']) ? '' : $data['estado_x']; ?><br><br>
+                Ciudad: <?php echo empty($data['nom_ciudad']) ? '' : $data['nom_ciudad']; ?><br><br>
+                Estado: <?php echo empty($data['nom_estado']) ? '' : $data['nom_estado']; ?><br><br>
                 Sueldo: <?php echo $data['sueldo']; ?><br><br>
-                Vacantes: <?php echo $data['vacantes']; ?><br><br>
+                Vacantes: <?php echo ($data['vacantes'] - totalSeleccionados($_GET['id'])); ?><br><br>
             </p>
             <?php if (!isset($_SESSION['tipo'])): ?>
                 <div class="row">
@@ -102,7 +102,7 @@ $visitas = numerodeVisitas($_GET['id']);
                         $seleccionar = estadoDeEmpleo($_GET['id']) ? '<button type="submit" class="btn btn-primary" >Seleccionar</button>' : '';
                         foreach ($postulantes as $e) {
                             if(yaEstaseleccionado($e['idusuario'], $_GET['id'])) $seleccionar =  '';
-
+                            if(isset($data['vacantes']) && (intval($data['vacantes']) - totalSeleccionados($_GET['id']) == 0)) $seleccionar =  '';
                             $buttonCurriculum = !empty($e['curriculum']) ? '<a class="btn btn-primary" target="_blank" href="'.$e['curriculum'].'">Ver curriculum</a>' :
                                 '<button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="No tiene curriculum">Ver curriculum</button>';
                             echo '<div class="card">
@@ -162,7 +162,7 @@ $visitas = numerodeVisitas($_GET['id']);
                 <div class="col-md-12">
                     <a href="empleos.php?id=<?php echo $data['idempresa'] ?>"><span class="txt-15 bold"><?php echo $data['nombre'] ?></span></a>
                     <p class="txt-10"><?php echo $data['ciudad'].', '.$data['estado']; ?></p>
-                    <span class="txt-8"><?php echo $data['sitio_web'] ?></span>
+                    <span class="txt-8"><a href="<?php echo $data['sitio_web'] ?>"><?php echo $data['sitio_web'] ?></a></span>
                 </div>
             </div>
         </div>
@@ -199,15 +199,26 @@ $visitas = numerodeVisitas($_GET['id']);
                                     <label for="password">Estado</label>
                                     <input  class="form-control" name="estado" id="estado"
                                             placeholder="Ingresa el estado"
-                                            value="<?php echo isset($data['estado_x']) ? $data['estado_x']: '' ?>">
+                                            value="<?php echo isset($data['nom_estado']) ? $data['nom_estado']: '' ?>">
+                                    <select class="custom-select" name="estado" id="estado" onchange="getCiudades(this)">
+                                        <?php
+                                        foreach($estados as $d){
+                                            if(isset($data['nom_estado']) && $data['nom_estado'] == $d['idestados']) {
+                                                echo '<option selected value="'.$d['idestados'].'">'.$d['estado'].'</option>';
+                                            }else{
+                                                echo '<option value="'.$d['idestados'].'">'.$d['estado'].'</option>';
+                                            }
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="password">Ciudad</label>
-                                    <input  class="form-control" name="ciudad" id="ciudad"
-                                            placeholder="Ingresa la ciudad"
-                                            value="<?php echo isset($data['ciudad']) ? $data['ciudad']: '' ?>">
+                                    <select class="custom-select" name="ciudad" id="ciudad">
+
+                                    </select>
                                 </div>
                             </div>
                         </div>

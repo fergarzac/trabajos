@@ -11,6 +11,9 @@ if(isset($_GET['buscar']) && !empty($_GET['buscar'])) {
     $h1 = 'Todos los empleos';
     $empresas = getEmpresas();
 }
+
+$categorias = getCategorias();
+$estados = getEstados();
 $pagina = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
 $paginacion = empleosPaginados($empresas, $pagina);
 $nextPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['page']) < $paginacion['paginas'] ? intval($_GET['page']) + 1 : 2;
@@ -94,7 +97,8 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
             <?php
             if (isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1) {
                 $enabled = isset($_SESSION['validado']) && $_SESSION['validado'] != 1 ? 'data-toggle="tooltip" data-placement="top" title="Necesitas validar tu cuenta"' : '';
-                echo '<button type="button" class="btn btn-primary col-md-12" style="margin-top: 15px" onclick="javascript:openModal(\'agregar_empleo\', ' . $_SESSION['validado'] . ')" ' . $enabled . '>Agregar Empleo</button>';
+                $class = isset($_SESSION['validado']) && $_SESSION['validado'] != 1 ? 'secondary' : 'primary';
+                echo '<button type="button" class="btn btn-'.$class.' col-md-12" style="margin-top: 15px" onclick="javascript:openModal(\'agregar_empleo\', ' . $_SESSION['validado'] . ')" ' . $enabled . '>Agregar Empleo</button>';
             } else {
                 echo ' <div style="margin-top: 50px"></div><h3>Postulaciones</h3>';
                 foreach ($mis_postulaciones as $e) {
@@ -145,15 +149,22 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="password">Estado</label>
-                                    <input type="number" class="form-control" name="estado" id="estado"
-                                           placeholder="Ingresa el estado">
+                                    <select class="custom-select" name="estado" id="estado" onchange="getCiudades(this)">
+                                        <option selected>Seleccionar</option>
+                                        <?php
+                                        foreach($estados as $d){
+                                            echo '<option value="'.$d['idestados'].'">'.$d['estado'].'</option>';
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="password">Ciudad</label>
-                                    <input type="number" class="form-control" name="ciudad" id="ciudad"
-                                           placeholder="Ingresa la ciudad">
+                                    <select class="custom-select" name="ciudad" id="ciudad">
+
+                                    </select>
                                 </div>
                             </div>
                         </div>

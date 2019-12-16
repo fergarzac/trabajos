@@ -17,6 +17,7 @@ if($con !== null) {
     if ($result->num_rows > 0) {
         $res = $result->fetch_assoc();
         $_SESSION['idusuario'] = $res['idusuarios'];
+        $_SESSION['usuario'] = $res['usuario'];
         $_SESSION['tipo'] = $res['tipo'];
         $_SESSION['validado'] = $res['validado'];
         $_SESSION['fecha'] = $res['creado_el'];

@@ -110,10 +110,12 @@ function getDataEmpleo($id = 0) {
     $con = getConnection();
     $id = intval($id);
     if($con !== null && $id > 0) {
-        $sql = "SELECT empleos.*, info_empresa.*,usuarios.*, categoria_empleos.nombre as nom_categoria FROM empleos 
+        $sql = "SELECT empleos.*, info_empresa.*,usuarios.*, categoria_empleos.nombre as nom_categoria, estados.estado as nom_estado, ciudades.ciudad as nom_ciudad FROM empleos 
                 LEFT JOIN info_empresa ON empleos.idempresa = info_empresa.idempresa 
                 LEFT JOIN usuarios ON empleos.idempresa = usuarios.idusuarios
                 LEFT JOIN categoria_empleos ON categoria_empleos.idcategoria_empleos = empleos.categoria
+                LEFT JOIN estados ON estados.idestados = empleos.estado_x
+                LEFT JOIN ciudades ON ciudades.idciudad = empleos.ciudad
                 where empleos.idempleos='$id'";
         $result = $con->query($sql);
         if($result && $result->num_rows>0){
@@ -381,8 +383,13 @@ function getNotificationes($id, $tipo, $desde){
             $sql = "SELECT notificaciones.*, JSON_SEARCH(visto_por, 'one', \"$id\") is not null as visto, info_usuario.nombre
                 FROM notificaciones LEFT JOIN info_usuario ON info_usuario.idusuario = notificaciones.idusuario
                 where evento IN ".$c." and creado_el >= '$desde' order by creado_el DESC LIMIT 15";
-        }else{
+        }else if($tipo == 2){
             $c = "(1,2,3,4)";
+            $sql = "SELECT notificaciones.*, JSON_SEARCH(visto_por, 'one', \"$id\") is not null as visto, info_empresa.nombre
+                FROM notificaciones LEFT JOIN info_empresa ON info_empresa.idempresa = notificaciones.idusuario
+                where evento IN ".$c." and creado_el >= '$desde' order by creado_el DESC LIMIT 15";
+        }else{
+            $c = "(2,3,4)";
             $sql = "SELECT notificaciones.*, JSON_SEARCH(visto_por, 'one', \"$id\") is not null as visto, info_empresa.nombre
                 FROM notificaciones LEFT JOIN info_empresa ON info_empresa.idempresa = notificaciones.idusuario
                 where evento IN ".$c." and creado_el >= '$desde' order by creado_el DESC LIMIT 15";
@@ -431,18 +438,29 @@ function yaEstaseleccionado($idusuario, $idempleo) {
     return false;
 }
 
+function updateValidado($idusuario) {
+    $con = getConnection();
+    if($con !== null && $idusuario > 0) {
+        $sql = "SELECT validado FROM usuarios where idusuarios = '$idusuario'";
+        $result = $con->query($sql);
+        if($result){
+            return $result->fetch_all(MYSQLI_ASSOC)[0]['validado'];
+        }
+    }
+    return '0';
+}
+
 /* Sube los archivos a la carpeta upload y regresa la ruta y nombre con la que se guardo */
 function uploadFile($file){
     $target_dir = "uploads/";
-    $random = rand(1, 10000);
-    $target_file = $target_dir . $random. basename($file["name"]);
+    $usuario = explode("@", $_SESSION['usuario']);
+    $ext = pathinfo(basename($file["name"]), PATHINFO_EXTENSION);
+    $random = isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1 ? rand(1, 10000) : $usuario[0];
+    $target_file = $target_dir . $random . '.' . $ext;
     $uploadOk = 1;
 
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
     // Check if file already exists
-    if (file_exists($target_file)) {
-        $uploadOk = 0;
-    }
     if ($file["size"] > 500000) {
         $uploadOk = 0;
     }
@@ -569,6 +587,71 @@ function getCategorias() {
     $con = getConnection();
     if($con !== null) {
         $sql = "SELECT * FROM categoria_empleos";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+        return [];
+    }
+    return false;
+}
+
+/* Obtiene los tipos de empresas */
+function getTiposEmpresas() {
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT * FROM tipos_empresa";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+        return [];
+    }
+    return false;
+}
+
+function getEmpresasActivas(){
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT * FROM usuarios WHERE tipo = 1 AND validado = 1";
+        $result = $con->query($sql);
+        if($result){
+            return $result->num_rows;
+        }
+        return 0;
+    }
+    return false;
+}
+
+function getEmpresasInactivas(){
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT * FROM usuarios WHERE tipo = 1 AND (validado = 0 OR validado = 2)";
+        $result = $con->query($sql);
+        if($result){
+            return $result->num_rows;
+        }
+        return 0;
+    }
+    return false;
+}
+
+function getCiudades($idestado) {
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT * FROM ciudades WHERE idestado = '$idestado'";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+        return [];
+    }
+    return false;
+}
+function getEstados() {
+    $con = getConnection();
+    if($con !== null) {
+        $sql = "SELECT * FROM estados";
         $result = $con->query($sql);
         if($result && $result->num_rows>0){
             return $result->fetch_all(MYSQLI_ASSOC);

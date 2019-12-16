@@ -3,6 +3,9 @@ session_start();
 require 'autoload.php';
 require 'comunes.php';
 
+if(isset($_SESSION['idusuario'])){
+    $_SESSION['validado'] = updateValidado($_SESSION['idusuario']);
+}
 if(isset($_GET['fromNotification']) && !empty($_GET['fromNotification']) && isset($_SESSION['idusuario'])){
     marcarLeidaNotificacion($_SESSION['idusuario'], $_GET['fromNotification']);
 }

@@ -38,9 +38,12 @@ function ValidarEmpleo(){
     var puesto = document.getElementById('puesto');
     var descripcion = document.getElementById('descripcion');
     var sueldo = document.getElementById('sueldo');
+    var estado = document.getElementById('estado');
+    var ciudad = document.getElementById('ciudad');
+    var vacantes = document.getElementById('vacantes');
 
-    if(puesto.value.length > 0 && descripcion.value.length > 0 && sueldo.value.length > 0) return true;
-
+    if(puesto.value.length > 0 && descripcion.value.length > 0 && sueldo.value.length > 0 && estado.value.length > 0 && ciudad.value.length > 0 && vacantes.value.length > 0 && sueldo.value > 0 && vacantes.value > 0) return true;
+    alert('Faltan datos por llenar o tienes un dato incorrecto.')
     return false;
 }
 
@@ -60,9 +63,22 @@ function ValidarDatos(){
     var direccion = document.getElementById('direccion');
     var nombre_contacto = document.getElementById('nombre_contacto');
     var telefono_contacto = document.getElementById('telefono_contacto');
-    if(rfc.value.length > 0 && nombre_contacto.value.length > 0 && telefono_contacto.value.length > 0 && sat.value.length > 0 && tipo.value.length > 0 && nombre.value.length > 0 && ciudad.value.length > 0 && estado.value.length > 0 && descripcion.value.length > 0 && sitio_web.value.length > 0 && direccion.value.length > 0) return true;
-    alert('Llena todos los campos');
+    if(rfc.value.length > 0 && nombre_contacto.value.length > 0 && telefono_contacto.value.length > 0 && sat.value.length > 0 && tipo.value.length > 0 && nombre.value.length > 0 && ciudad.value.length > 0 && estado.value.length > 0 && descripcion.value.length > 0 && sitio_web.value.length > 0 && direccion.value.length > 0 && rfc.value.length > 11 && rfc.value.length < 14 && isURL(sitio_web.value)) return true;
+    console.log(isURL(sitio_web.value));
+    console.log(rfc.value.length > 11);
+    console.log(rfc.value.length < 14);
+    alert('Olvidaste llenar un campo, o pusiste datos invalidos');
     return false;
+}
+
+function isURL(str) {
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+        '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return !!pattern.test(str);
 }
 
 function ValidarDatosUsuario(){
@@ -102,3 +118,20 @@ function hideAll(paneles){
     });
 }
 
+function getCiudades(estado) {
+    var id = estado.value;
+    var opts = {
+        method: 'GET',
+        headers: {}
+    };
+    fetch('ciudades?id='+id, opts).then(function (response) {
+        return response.json();
+    }).then(function (body) {
+        var ciudades = document.getElementById('ciudad');
+        var options = "";
+        body.forEach(function(element, index){
+            options += "<option value='"+element.idciudad+"'>"+element.ciudad+"</option>"
+        })
+        ciudades.innerHTML = options;
+    });
+}

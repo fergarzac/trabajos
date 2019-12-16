@@ -13,6 +13,9 @@ $empresas_pendientes = getEmpresasValidadas();
 $postulaciones = getPostulaciones();
 $seleccionados = getSeleccionados();
 
+
+$totalEmpresasActivas = getEmpresasActivas();
+$totalEmpresasInactivas = getEmpresasInactivas();
 $totalEmpleos = is_array($empleos) ? sizeof($empleos) : 0;
 $totalUsuarios = is_array($usuarios) ? sizeof($usuarios) : 0;
 $totalEmpresas = is_array($empresas) ? sizeof($empresas) : 0;
@@ -37,10 +40,21 @@ $totalSeleccionados = is_array($seleccionados) ? sizeof($seleccionados) : 0;
             <div class="card" style="width: 100%;height: 150px;text-align: center">
                 <div class="card-body">
                     <h5 class="card-title">Total de empresas</h5>
-                    <p class="card-text" style="vertical-align: center;font-size: 25pt;font-weight: bold">
-                        <?php echo $totalEmpresas ?>
-                    </p>
-                    <a href="#" onclick="getTabla(1)">Ver</a>
+                    <div class="row">
+                        <div class="col-md-12" style="vertical-align: center;font-size: 22pt;font-weight: bold">
+                            <?php echo $totalEmpresas ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $totalEmpresasActivas ?> activas
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $totalEmpresasInactivas ?> inactivas
+                        </div>
+                        <div class="col-md-12">
+                            <a href="#" onclick="getTabla(1)">Ver</a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

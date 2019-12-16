@@ -29,9 +29,10 @@ if($con !== null) {
     $idempresa = $_SESSION['idusuario'];
     $uploadCurriculum = isset($_FILES['logo']) && !empty($_FILES['logo']) ? uploadFile($_FILES['logo']) : ['status' => 0];
     $urllogo = $uploadCurriculum['status'] == 1 ? $uploadCurriculum['dir'] : '';
+    $foto = $urllogo != '' ? ", logo = '$urllogo'" : '';
     $sql = "UPDATE info_empresa SET  nombre = '$nombre', rfc = '$rfc', numero_sat = '$numero_sat', estado = '$estado', ciudad = '$ciudad',
             direccion = '$direccion', tipo_empresa = '$tipo_empresa', introduccion = '$descripcion', sitio_web = '$sitio_web',
-             nombre_contacto = '$nombre_contacto', telefono_contacto = '$telefono_contacto', logo = '$urllogo' WHERE idempresa = '$idempresa'";
+             nombre_contacto = '$nombre_contacto', telefono_contacto = '$telefono_contacto' ".$foto." WHERE idempresa = '$idempresa'";
     $result = $con->query($sql);
     if($result){
         unset($_SESSION['error']);
