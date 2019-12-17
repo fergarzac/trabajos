@@ -639,14 +639,15 @@ function getEmpresasInactivas(){
 function getCiudades($idestado) {
     $con = getConnection();
     if($con !== null) {
+        mysqli_set_charset($con,"utf8");
         $sql = "SELECT * FROM ciudades WHERE idestado = '$idestado'";
         $result = $con->query($sql);
         if($result && $result->num_rows>0){
-            return $result->fetch_all(MYSQLI_ASSOC);
+            return ($result->fetch_all(MYSQLI_ASSOC));
         }
-        return [];
+        return  [];
     }
-    return false;
+    return  [];
 }
 function getEstados() {
     $con = getConnection();

@@ -63,22 +63,24 @@ function ValidarDatos(){
     var direccion = document.getElementById('direccion');
     var nombre_contacto = document.getElementById('nombre_contacto');
     var telefono_contacto = document.getElementById('telefono_contacto');
-    if(rfc.value.length > 0 && nombre_contacto.value.length > 0 && telefono_contacto.value.length > 0 && sat.value.length > 0 && tipo.value.length > 0 && nombre.value.length > 0 && ciudad.value.length > 0 && estado.value.length > 0 && descripcion.value.length > 0 && sitio_web.value.length > 0 && direccion.value.length > 0 && rfc.value.length > 11 && rfc.value.length < 14 && isURL(sitio_web.value)) return true;
-    console.log(isURL(sitio_web.value));
-    console.log(rfc.value.length > 11);
-    console.log(rfc.value.length < 14);
+    if(rfc.value.length < 12 || rfc.value.length > 13){
+        alert('El RFC no es valido, debe tener mas de 12 caracteres y menos de 13.');
+        return false;
+    }
+
+    if(!isURL(sitio_web.value)) {
+        alert('No es un sitio web valido.');
+        return false;
+    }
+    if(nombre_contacto.value.length > 0 && telefono_contacto.value.length > 0 && sat.value.length > 0 && tipo.value.length > 0 && nombre.value.length > 0 && ciudad.value.length > 0 && estado.value.length > 0 && descripcion.value.length > 0 && sitio_web.value.length > 0 && direccion.value.length > 0) return true;
+
     alert('Olvidaste llenar un campo, o pusiste datos invalidos');
     return false;
 }
 
 function isURL(str) {
-    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-        '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-    return !!pattern.test(str);
+    var RegExp = (/^HTTP|HTTP|http(s)?:\/\/(www\.)?[A-Za-z0-9]+([\-\.]{1}[A-Za-z0-9]+)*\.[A-Za-z]{2,40}(:[0-9]{1,40})?(\/.*)?$/);
+    return RegExp.test(str);
 }
 
 function ValidarDatosUsuario(){

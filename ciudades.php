@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 session_start();
 require 'funciones\comunes.php';
 
@@ -12,4 +12,4 @@ if(!validarArray($_GET, $array)){
 }
 $data = clearData($_GET);
 
-echo json_encode(getCiudades($data['id']));
+echo json_encode(getCiudades($data['id']), JSON_UNESCAPED_UNICODE);
