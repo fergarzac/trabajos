@@ -18,6 +18,7 @@ $pagina = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
 $paginacion = empleosPaginados($empresas, $pagina);
 $nextPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['page']) < $paginacion['paginas'] ? intval($_GET['page']) + 1 : 2;
 $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['page']) > 1 ? intval($_GET['page']) - 1 : 1;
+
 ?>
     <div class="container">
         <?php if (isset($modales)) echo $modales; ?>
@@ -52,6 +53,10 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                 <div class="col-md-12 mt">
                     <?php
                     foreach ($paginacion['empleos'] as $key => $data) {
+                        $estado =  isset($data['estado']) && !empty($data['estado']) ? getEstado($data['estado']) : "";
+                        $ciudad =  isset($data['ciudad']) && !empty($data['ciudad']) ? getCiudad($data['ciudad']) : "";
+                        $ciudad = isset($ciudad["ciudad"]) ? $ciudad["ciudad"] : "";
+                        $estado = isset($estado["estado"]) ? $estado["estado"] : "";
                         echo '<div class="card" style="margin: 5px">
                                   <div class="card-body">
                                     <div class="row">
@@ -62,7 +67,7 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                                             <div class="row">
                                                 <div class="col-md-10">
                                                     <span class="txt-15 bold">' . $data['nombre'] . '</span><br>
-                                                    <span class="txt-8">' . $data['estado'] . '</span><br>
+                                                    <span class="txt-8">' .  $ciudad .',' .$estado . '</span><br>
                                                     <span class="txt-8">' . $data['sitio_web'] . '</span>
                                                 </div>
                                                 <div class="col-md-2">

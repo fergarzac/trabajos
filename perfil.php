@@ -26,7 +26,7 @@ if(!$validate) {
         $avanzado = $data['ingles'] == "Avanzado" ? "selected" : "";
     }
 }
-
+$estados = getEstados();
 $tipos = getTiposEmpresas();
 ?>
 <?php
@@ -89,15 +89,35 @@ $tipos = getTiposEmpresas();
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="password">Estado</label>
-                                    <input type="text" class="form-control" name="estado" id="estado" value="<?php echo isset($data) && !empty($data) ? $data['estado'] : '' ?>"
-                                           placeholder="Ingresa el estado" autocomplete="off" required>
+                                    <select class="custom-select" name="estado" id="estado" onchange="getCiudades(this)">
+                                        <?php
+                                        foreach($estados as $d){
+                                            if(isset($data) && isset($data["estado"]) && $d['idestados'] == $data["estado"]){
+                                                echo '<option selected value="'.$d['idestados'].'">'.$d['estado'].'</option>';
+                                            }else{
+                                                echo '<option value="'.$d['idestados'].'">'.$d['estado'].'</option>';
+                                            }
+
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="password">Ciudad</label>
-                                    <input type="text" class="form-control" name="ciudad" id="ciudad" value="<?php echo isset($data) && !empty($data) ? $data['ciudad'] : '' ?>"
-                                           placeholder="Ingresa la ciudad" autocomplete="off" required>
+                                    <select class="custom-select" name="ciudad" id="ciudad">
+                                        <?php
+                                        $ciudades = isset($data) && isset($data["estado"]) ? getCiudades($data["estado"]) : [];
+                                        foreach($ciudades as $d){
+                                            if($d['idciudad'] == $data["ciudad"]){
+                                                echo '<option selected value="'.$d['idciudad'].'">'.$d['ciudad'].'</option>';
+                                            }else {
+                                                echo '<option value="'.$d['idciudad'].'">'.$d['ciudad'].'</option>';
+                                            }
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-4">

@@ -110,7 +110,8 @@ function getDataEmpleo($id = 0) {
     $con = getConnection();
     $id = intval($id);
     if($con !== null && $id > 0) {
-        $sql = "SELECT empleos.*, info_empresa.*,usuarios.*, categoria_empleos.nombre as nom_categoria, estados.estado as nom_estado, ciudades.ciudad as nom_ciudad FROM empleos 
+        $sql = "SELECT empleos.*, usuarios.*, categoria_empleos.nombre as nom_categoria, estados.estado as nom_estado, ciudades.ciudad as nom_ciudad,
+        info_empresa.estado as estado_em, info_empresa.ciudad as ciudad_em, info_empresa.nombre, info_empresa.sitio_web,info_empresa.logo as logo FROM empleos 
                 LEFT JOIN info_empresa ON empleos.idempresa = info_empresa.idempresa 
                 LEFT JOIN usuarios ON empleos.idempresa = usuarios.idusuarios
                 LEFT JOIN categoria_empleos ON categoria_empleos.idcategoria_empleos = empleos.categoria
@@ -660,4 +661,46 @@ function getEstados() {
         return [];
     }
     return false;
+}
+
+function getEstado($id) {
+    $con = getConnection();
+    if($con !== null) {
+        mysqli_set_charset($con,"utf8");
+        $sql = "SELECT * FROM estados WHERE idestados = '$id'";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC)[0];
+        }
+        return [];
+    }
+    return false;
+}
+
+function getCiudad($id) {
+    $con = getConnection();
+    if($con !== null) {
+        mysqli_set_charset($con,"utf8");
+        $sql = "SELECT * FROM ciudades WHERE idciudad = '$id'";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC)[0];
+        }
+        return [];
+    }
+    return false;
+}
+
+function getLogo($id) {
+    $con = getConnection();
+    if($con !== null) {
+        mysqli_set_charset($con,"utf8");
+        $sql = "SELECT logo FROM info_empresa WHERE idempresa = '$id'";
+        $result = $con->query($sql);
+        if($result && $result->num_rows>0){
+            return $result->fetch_all(MYSQLI_ASSOC)[0]['logo'];
+        }
+        return "";
+    }
+    return "";
 }

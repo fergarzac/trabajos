@@ -1,4 +1,11 @@
+var sueldo = document.getElementById("sueldo");
+sueldo.addEventListener("keyup", function(e){
+    e.preventDefault();
+    if(e.keyCode == 189){
+        sueldo.value = sueldo.value.substring(0, sueldo.value.length - 1);
+    }
 
+})
 function seleccion(tipo) {
     var input_tipo = document.getElementById('tipo');
     input_tipo.value = tipo;

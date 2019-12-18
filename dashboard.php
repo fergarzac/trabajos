@@ -137,6 +137,7 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                     }
                     foreach ($paginacion['empleos'] as $key => $data) {
                         $logo = isset($data['logo']) && !empty($data['logo']) ? $data['logo'] : 'https://via.placeholder.com/150';
+                        $logo = $_SESSION["tipo"] != 1 ? $logo : getLogo($_SESSION["idusuario"]);
                         $nombre = isset($data['nombre']) ? $data['nombre'] : "";
                         echo '<div class="card" style="margin: 5px">
                                   <div class="card-body">

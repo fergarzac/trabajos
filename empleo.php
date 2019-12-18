@@ -19,8 +19,14 @@ if(isset($_SESSION['tipo']) && $_SESSION['tipo'] == "1"){
 }
 $categorias = getCategorias();
 if($data == false || empty($data)) header('location:dashboard.php');
-$visitas = numerodeVisitas($_GET['id']);
 
+$visitas = numerodeVisitas($_GET['id']);
+$estados = getEstados();
+
+$ciudad =  isset($data['ciudad_em']) && !empty($data['ciudad_em']) ? getCiudad($data['ciudad_em']) : "";
+$estado =  isset($data['estado_em']) && !empty($data['estado_em']) ? getEstado($data['estado_em']) : "";
+$ciudad = isset($ciudad["ciudad"]) ? $ciudad["ciudad"] : "";
+$estado = isset($estado["estado"]) ? $estado["estado"] : "";
 ?>
 
 <div class="container">
@@ -80,6 +86,8 @@ $visitas = numerodeVisitas($_GET['id']);
                                     <input type="hidden"  name="idempleo" id="idempleo" value="'.$data['idempleos'].'">
                                     <button type="'.$type.'" class="btn btn-info" ' . $enabled . '>Postularte</button>
                                 </form>';
+                            }else if(yaEstaseleccionado($_SESSION['idusuario'], $data['idempleos'])){
+                                echo '<span class="badge badge-primary">Fuiste seleccionado</span>';;
                             }else{
                                 echo '<span class="badge badge-primary">Ya estas postulado</span>';
                                 echo '<form action="despostularse.php" method="POST">
@@ -161,7 +169,7 @@ $visitas = numerodeVisitas($_GET['id']);
                 </div>
                 <div class="col-md-12">
                     <a href="empleos.php?id=<?php echo $data['idempresa'] ?>"><span class="txt-15 bold"><?php echo $data['nombre'] ?></span></a>
-                    <p class="txt-10"><?php echo $data['ciudad'].', '.$data['estado']; ?></p>
+                    <p class="txt-10"><?php echo $ciudad.', '.$estado; ?></p>
                     <span class="txt-8"><a href="<?php echo $data['sitio_web'] ?>"><?php echo $data['sitio_web'] ?></a></span>
                 </div>
             </div>
@@ -197,13 +205,10 @@ $visitas = numerodeVisitas($_GET['id']);
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="password">Estado</label>
-                                    <input  class="form-control" name="estado" id="estado"
-                                            placeholder="Ingresa el estado"
-                                            value="<?php echo isset($data['nom_estado']) ? $data['nom_estado']: '' ?>">
                                     <select class="custom-select" name="estado" id="estado" onchange="getCiudades(this)">
                                         <?php
                                         foreach($estados as $d){
-                                            if(isset($data['nom_estado']) && $data['nom_estado'] == $d['idestados']) {
+                                            if(isset($data['estado_x']) && $data['estado_x'] == $d['idestados']) {
                                                 echo '<option selected value="'.$d['idestados'].'">'.$d['estado'].'</option>';
                                             }else{
                                                 echo '<option value="'.$d['idestados'].'">'.$d['estado'].'</option>';
@@ -217,7 +222,16 @@ $visitas = numerodeVisitas($_GET['id']);
                                 <div class="form-group">
                                     <label for="password">Ciudad</label>
                                     <select class="custom-select" name="ciudad" id="ciudad">
-
+                                        <?php
+                                        $ciudades = isset($data) && isset($data["estado_x"]) ? getCiudades($data["estado_x"]) : [];
+                                        foreach($ciudades as $d){
+                                            if($d['idciudad'] == $data["ciudad"]){
+                                                echo '<option selected value="'.$d['idciudad'].'">'.$d['ciudad'].'</option>';
+                                            }else {
+                                                echo '<option value="'.$d['idciudad'].'">'.$d['ciudad'].'</option>';
+                                            }
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
