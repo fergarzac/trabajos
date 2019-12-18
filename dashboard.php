@@ -272,7 +272,7 @@ $previusPage = isset($_GET['page']) && !empty($_GET['page']) && intval($_GET['pa
                                 <div class="form-group">
                                     <label for="password">Vacantes</label>
                                     <input type="number" class="form-control" name="vacantes" id="vacantes"
-                                           placeholder="Ingresa el numero de vacantes">
+                                           placeholder="Ingresa el numero de vacantes" value="1">
                                 </div>
                             </div>
                         </div>

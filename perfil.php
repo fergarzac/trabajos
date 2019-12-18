@@ -55,7 +55,7 @@ $tipos = getTiposEmpresas();
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="password">RFC</label>
-                                    <input type="text" class="form-control" name="rfc" id="rfc" value="<?php echo isset($data) && !empty($data) ? $data['rfc'] : '' ?>"
+                                    <input minlength="12" maxlength="13" type="text" class="form-control" name="rfc" id="rfc" value="<?php echo isset($data) && !empty($data) ? $data['rfc'] : '' ?>"
                                            placeholder="Ingresa el RFC" autocomplete="off" required>
                                 </div>
                             </div>
@@ -155,7 +155,7 @@ $tipos = getTiposEmpresas();
                                         <div class="form-group">
                                             <label for="password">Sitio web</label>
                                             <input type="text" class="form-control" name="sitio_web" id="sitio_web" value="<?php echo isset($data) && !empty($data) ? $data['sitio_web'] : '' ?>"
-                                                   placeholder="Ingresa el sitio web" autocomplete="off">
+                                                   placeholder="http://www.trabajo.com" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>

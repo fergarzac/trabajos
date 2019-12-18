@@ -133,7 +133,7 @@ function getCiudades(estado) {
         method: 'GET',
         headers: {}
     };
-    fetch('ciudades?id='+id, opts).then(function (response) {
+    fetch('ciudades.php?id='+id, opts).then(function (response) {
         return response.json();
     }).then(function (body) {
         var ciudades = document.getElementById('ciudad');
